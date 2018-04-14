@@ -81,8 +81,7 @@ function resolveExport(exportAst, tplRes) {
   let components = [];
   let methods = [];
   let computedRes = {
-    funcsToInsert: [],
-    convertToWatches: [],
+    computedFuncs: [],
     dataToInit: []
   };
   let watchRes = {
@@ -127,9 +126,8 @@ function resolveExport(exportAst, tplRes) {
     return propToDeleteIndex.indexOf(i) < 0;
   });
 
-  // 转换onInit钩子（添加数据的watch，如果使用了路由，将路由绑定到this.$router）
-  const toWatch = computedRes.convertToWatches.concat(watchRes.watches);
-  properties.push(resolveOnInit(onInitProp, toWatch, routerRes.routerInfo));
+  // 转换onInit钩子（添加数据的watch；computed数据添加getter；如果使用了路由，将路由绑定到this.$router）
+  properties.push(resolveOnInit(onInitProp, watchRes.watches, computedRes.computedFuncs, routerRes.routerInfo));
   // 将computed数据添加到data初始化
   properties.push(getDataAst(computedRes.dataToInit, dataProp));
 
@@ -138,8 +136,8 @@ function resolveExport(exportAst, tplRes) {
     methods = resolveChangeCallback(methods, tplRes.attrCollection);
   }
 
-  // method提取到外层、添加转换后的compute函数、添加watch函数
-  exportAst.declaration.properties = properties.concat(methods, computedRes.funcsToInsert, watchRes.props);
+  // methods提取到外层、添加watch函数
+  exportAst.declaration.properties = properties.concat(methods, watchRes.props);
   return {
     routerInfo: routerRes.routerInfo,
     components,
@@ -269,8 +267,9 @@ function getVModelAst(vModels, e, keyToPolyfill){
   return esprima.parseScript(jsStr).body
 }
 
-// 将compute转换为的watch、路由绑定操作添加到onInit钩子
-function resolveOnInit(onInitAst, watches, routerInfo){
+// 在onInit钩子中抹平router、computed、watch
+function resolveOnInit(onInitAst, watches, computedFuncs, routerInfo){
+  // 路由兼容代码
   const $routerCode = routerInfo.$router ? 'this.$router=_kyy_router;' : '';
   const $routeCode = routerInfo.$route ? 'this.$route={};this.$route.query=this;' : '';
   // 快应用会把数据转换为字符串
@@ -279,13 +278,18 @@ function resolveOnInit(onInitAst, watches, routerInfo){
     return all + `this.${cur}=new Function('return ' + this.${cur})();`
   }, '');
 
+  // computed兼容代码
+  const computedCode = computedFuncs.reduce((all, cur)=>{
+    return all + `Object.defineProperty(this, '${cur.key}', {get:${cur.funcStr}});`
+  }, '');
+  // watch兼容代码
   const watchCode = watches.reduce((total, cur)=>{
     // 对于computed转换为的watch，初始化时需要执行一次watch回调函数，以完成数据初始化，从而表现和computed一致
     const autoExecute = cur.type === 'computed' ? `this.${cur.callback}();` : '';
     return total + `this.$watch('${cur.watchData}', '${cur.callback}');${autoExecute}`;
   }, '');
 
-  const code = $routerCode + $routeCode + queryDataRevertCode + watchCode
+  const code = $routerCode + $routeCode + queryDataRevertCode + computedCode + watchCode
 
   // 如果已经定义了onInit钩子
   if(onInitAst){
@@ -299,53 +303,19 @@ function resolveOnInit(onInitAst, watches, routerInfo){
 
 // 用快应用的watch模拟computed
 function resolveComputed(computedProp){
+  // 提取conmputed的数据名，以及computed函数
+  const dataToInit = [], computedFuncs = [];
   const prop = computedProp.value.properties;
-  const collect = [];
-  const watchCallbacks = {};
-  const dataToInit = [];
   prop.forEach((item)=>{
-    const autoFuncName = `_kyy_computed_${item.key.name}`;
-    // 寻找this，this的property就是依赖的数据
-    walk(item.value, function(node){
-      if(node.object && node.object.type === 'ThisExpression'){
-        const watchProp = node.property.name;
-        watchCallbacks[watchProp] ? 
-        watchCallbacks[watchProp].push(autoFuncName) : 
-        watchCallbacks[watchProp] = [autoFuncName];
-      }
-    });
-
-    // computed的数据需要添加到data中初始化
     dataToInit.push(item.key.name);
-    // 依赖的数据变化时，执行的代码
-    const func = `this.${item.key.name}=${escodegen.generate(item.value)}.call(this)`;
-    item.key.name = autoFuncName;
-    item.value = getFuncAttrAst(autoFuncName, func).value;
-    collect.push(item);
-  });
-
-  let convertToWatches = [];
-  Object.keys(watchCallbacks).forEach((key)=>{
-    const item = watchCallbacks[key];
-    // 拼接据变化时要执行的函数
-    const calls = item.reduce((total, funcName)=>{
-      return total + `this.${funcName}();`;
-    }, '');
-
-    const watchCallBackName = `_kyy_computed_watch_${key}`;
-    // 将watch回调函数添加到属性中
-    collect.push(getFuncAttrAst(watchCallBackName, calls));
-    convertToWatches.push({
-      watchData: key,
-      callback: watchCallBackName,
-      type: 'computed'
+    computedFuncs.push({
+      key: item.key.name,
+      funcStr: escodegen.generate(item.value) // 将computed方法转换为字符串，方便后续拼接
     });
   });
-  
   return {
-    funcsToInsert: collect,
-    convertToWatches,
-    dataToInit
+    dataToInit,
+    computedFuncs
   }
 }
 
