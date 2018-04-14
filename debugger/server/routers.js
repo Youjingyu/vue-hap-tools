@@ -1,0 +1,1 @@
+"use strict";function mountRouters(){var e=(process.env.NODE_MOUNTED_ROUTER||"").replace(/^\s*|\s*$/g,"")||"bundle";e=e.split(/\s+/);var u=[];return e.forEach(function(e){switch(e.toLowerCase()){case"bundle":u.push(require("./bundle/index"));break;case"debug":u.push(require("./debug/index"))}}),u}module.exports=mountRouters();

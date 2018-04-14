@@ -1,0 +1,1 @@
+"use strict";require("../lib/regenerator");var _utils=require("../lib/utils"),_server=require("./server");(0,_server.startServer)(),process.on("uncaughtException",function(r){_utils.colorconsole.error("### App Server ### There is an unanticipated error:\n"+JSON.stringify(r))});
