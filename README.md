@@ -19,5 +19,5 @@ npm run qa-dev
 ```
 预览快应用效果需要在支持快应用的手机（如小米、华为）上安装[调试器](https://www.quickapp.cn/docCenter/post/69)、[预览工具](https://www.quickapp.cn/docCenter/post/69)。安装完成后，扫码即可查看效果。
 ## 其他
-[vue-hap-tools文档](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/docs.md)  
+[vue-hap-tools文档](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/doc.md)  
 [已知问题](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/knownIssues.md)
