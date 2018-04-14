@@ -52,7 +52,7 @@
 - 快应用中使用visibility切换元素是否可见存在bug，切换为visibility:visible后，再切换为visibility:hidden，不生效
 #### TODO
 下面是样式中需要规避的点，未来会逐一解决
-- 快应用中div组件默认是display: flex，因此会转换为div组件的html需要设置为display: flex
+- 快应用中div组件默认是display: flex，因此标签转换列表中div组件对应的html标签需要设置为display: flex
 - 不能依赖web标签的默认样式。比如h1、h2、p都会转换为div组件，其默认样式会丢失
 - 由于进行了标签转换，暂不支持标签选择器
 - class动态绑定支持对象写法，暂不支持数组写法
@@ -85,8 +85,8 @@ this.$router.push({
 // 在下一个页面判断数据类型
 typeof this.$route.query.userInfo.valid // boolean
 typeof this.$route.query.userInfo.cute // string
-typeof this.$route.query.userInfo.flag1 // boolean
-typeof this.$route.query.userInfo.flag2 // boolean
+typeof this.$route.query.flag1 // boolean
+typeof this.$route.query.flag2 // boolean
 ```
 - 由于快应用会把页面间的数据直接绑定到this上，所以this实例上不应该有与上个页面传递的数据的key冲突的属性，否则会出现覆盖问题
 - 不支持watch $route变量

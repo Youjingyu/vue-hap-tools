@@ -31,6 +31,7 @@ npm i vue-hap-tools --save-dev
   "qa-release": "vue-hap release"
 }
 ```
+然后执行```npm run qa-dev```查看效果  
 如果要运行```npm run qa-release```来发布，需要在项目根目录下添加证书：
 ```bash
 sign
