@@ -4,23 +4,29 @@ const convertJs = require('./convertJs');
 const compiler = require('vue-template-compiler');
 const loaderUtils = require("loader-utils");
 
-module.exports = function(source) {
-  this.cacheable && this.cacheable();
+module.exports = function(source, options = {}) {
+  const query = loaderUtils.parseQuery(this.query);
+  this.cacheable && this.cacheable(true);
   const block = compiler.parseComponent(source);
   if (block.styles.length > 1) {
     throw new Error('一个vue模板只能有一个<style>标签');
   }
   let tplRes = {};
-  // 写空标签会导致编译报错，因此无内容是，不能写空的style、script、template
+  // 写空标签会导致编译报错，因此无内容时，不能写空的style、script、template标签
   let tpl = '';
-  if(block.template){
+  if(block.template && (options.convetAll || query.type === 'templates' || query.type === 'scripts')){
     tplRes = convertTpl(block.template.content);
     tpl = `<template>${tplRes.tpl}</template>`
   }
-  let style = block.styles.length ? `<style>${convertStyle(block.styles[0].content)}</style>` : '';
+
+  let style = '';
+  if(block.styles && (options.convetAll || query.type === 'styles')){
+    style = `<style>${convertStyle(block.styles[0].content)}</style>`
+  }
+
   let js = '';
   let components = '';
-  if(block.script){
+  if(block.script && (options.convetAll || query.type === 'scripts')){
     const jsResult = convertJs(block.script.content, tplRes);
     js = `<script>${jsResult.jsString}</script>`;
 
@@ -28,6 +34,6 @@ module.exports = function(source) {
       return `${res}<import src="${cur.value}" name="${cur.name}"></import>`
     }, '');
   }
+
   return `${components}${tpl}${js}${style}`;
 }
-
