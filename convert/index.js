@@ -5,8 +5,9 @@ const compiler = require('vue-template-compiler');
 const loaderUtils = require("loader-utils");
 
 module.exports = function(source, options = {}) {
-  const query = loaderUtils.parseQuery(this.query);
-  this.cacheable && this.cacheable(true);
+  this.cacheable && this.cacheable();
+
+  const query = loaderUtils.parseQuery(this.query);  
   const block = compiler.parseComponent(source);
   if (block.styles.length > 1) {
     throw new Error('一个vue模板只能有一个<style>标签');
