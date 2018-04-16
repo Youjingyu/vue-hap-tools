@@ -63,7 +63,6 @@
 - 如果初始化时v-model的值没有定义，v-model没有效果
 - 如果v-model和@input同时使用，@input事件的回调函数一定要在methods中定义，否则v-model不生效
 - 如果两个输入框都使用了v-model且都绑定了input事件，两个输入框的input事件的回调函数名不能相同，否则两个输入框会相互影响
-- 如果computed的数据不依赖其他数据，就直接写在data中，否则不会生效
 - input不支持键盘相关事件（keyup、keydown等），监听input的改变只能使用input事件，vue-hap-tools会转为快应用支持的change事件
 - 事件绑定不支持表达式
 - 对于数组内容的直接修改，如this.arrayData[0].name='john'，快应用检测不到
