@@ -8,6 +8,7 @@
 | block | template |  
 | progress | progress |  
 | text | span,strong,i,sub,sup,time,u,var,b,abbr,cite,code,em,q,address,pre,del,ins |  
+| span | span嵌套的span |  
 | a | a,router-link |  
 | label | label |  
 | textarea | textarea |  
@@ -38,6 +39,7 @@
 #### 特异性
 下面是快应用关于样式特异性的说明：
 - 只有文本组件（a、span、label、text等）才支持[文本样式](https://doc.quickapp.cn/widgets/text.html)
+- 只支持#id、.class 、tag、后代、直接后代选择器。由于快应用组件类型数量限制，标签选择器暂只支持div、span、a、input、label、textarea
 - 对于多级选择器，只有最后一个选择器的改变，组件才会更新，比如下面的代码，将div class中的parent1修改为parent2样式不会更新，child1修改为child2则会更新
 ```html
 <style>
@@ -52,7 +54,7 @@
 - 快应用中使用visibility切换元素是否可见存在bug，切换为visibility:visible后，再切换为visibility:hidden，不生效
 #### TODO
 下面是样式中需要规避的点，未来会逐一解决
-- 快应用中div组件默认是display: flex，因此标签转换列表中div组件对应的html标签需要设置为display: flex
+- 快应用中div组件默认是display: flex，因此[标签转换列表](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/knownIssues.md#%E6%A0%87%E7%AD%BE%E8%BD%AC%E6%8D%A2%E5%88%97%E8%A1%A8)中div组件对应的html标签需要设置为display: flex
 - 不能依赖web标签的默认样式。比如h1、h2、p都会转换为div组件，其默认样式会丢失
 - 由于进行了标签转换，暂不支持标签选择器
 - class动态绑定支持对象写法，暂不支持数组写法
