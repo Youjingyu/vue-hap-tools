@@ -325,3 +325,4 @@ module.exports = function(tpl) {
     attrCollection
   };
 }
+module.exports.tagConvertMap = tagConvertMap;
