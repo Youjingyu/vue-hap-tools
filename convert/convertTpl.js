@@ -31,7 +31,7 @@ var tagConvertMap = function() {
     // 'list-item': 'li',  
     'block': 'template',
     'progress': 'progress',
-    'text': 'span,strong,i,small,sub,sup,time,u,var,b,abbr,cite,code,em,q,address,pre,del,ins',
+    'text': 'span,strong,i,small,sub,sup,time,u,var,b,abbr,cite,code,em,q,address,pre,del,ins,mark',
     'a': 'a,router-link',
     'label': 'label',
     'textarea': 'textarea',
@@ -139,7 +139,7 @@ function process(ast) {
           });
         }
       }
-
+      
       //替换tag
       var ctag = tagConvertMap[item.tagName];
       if (ctag) {
