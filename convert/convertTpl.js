@@ -68,11 +68,11 @@ var attrsConvert = {
     attr: 'if',
     val: convertExpress
   },
-  'v-else-if': {
-    attr: 'else-if',
+  '^v-else-if$': {
+    attr: 'elif',
     val: convertExpress
   },
-  'v-else': {
+  '^v-else$': {
     attr: 'else'
   },
   'v-show': {
@@ -319,6 +319,7 @@ module.exports = function(tpl) {
   });
   ast = process(ast);
   var newtpl = parse.serialize(ast);
+  // console.log(newtpl);
   return {
     tpl: newtpl,
     attrCollection
