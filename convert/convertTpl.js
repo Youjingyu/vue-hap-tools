@@ -226,12 +226,11 @@ function findAttr(attrs, name){
 
 function convertObjProp(prop, type){
   // 转换对象形式的class
-  if(type === 'class' && /^{.+?}$/.test(prop)){
-    // 删除对象前后的括号，删除单引号
-    let keyValPair = prop.replace(/^([ ]*{)|(}[ ]*)$/g, '').split(',');
+  if(type === 'class' && /^{(.|\n|\t)+?}$/.test(prop)){
+    // 删除对象前后的括号，删除空白字符
+    // hap-tools会以空格拆分表达式
+    let keyValPair = prop.replace(/^([ ]*{)|(}[ ]*)$/g, '').replace(/\s+/g, '').split(',');
     keyValPair = keyValPair.map((item)=>{
-      // 去除空格，hap-tools会以空格拆分表达式
-      item = item.replace(/[ ]+/g, '');
       const keyVal = item.split(':');
       // 如果class名有单引号，先去除单引号
       const key = keyVal.shift().replace(/'/g, '');
