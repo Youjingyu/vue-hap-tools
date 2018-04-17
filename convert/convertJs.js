@@ -216,7 +216,7 @@ function getComponents(prop) {
   const components = [];
   prop.value.properties.forEach((subProp) => {
     components.push({
-      name: subProp.key.name,
+      name: subProp.key.name || subProp.key.value,
       value: subProp.value.name
     });
   });
