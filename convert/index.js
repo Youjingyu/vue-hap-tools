@@ -21,7 +21,7 @@ module.exports = function(source, options = {}) {
   }
 
   let style = '';
-  if(block.styles && (options.convetAll || query.type === 'styles')){
+  if(block.styles && block.styles.length > 0 && (options.convetAll || query.type === 'styles')){
     style = `<style>${convertStyle(block.styles[0].content)}</style>`
   }
 
