@@ -41,4 +41,4 @@ sign
 ```
 ## 样式
 快应用只支持部分web样式，可以理解为web的子集，这部分暂时还不能很好地抹平两端的差异性，在开发之前建议先熟悉[通用样式](https://doc.quickapp.cn/widgets/common-styles.html)以及特定标签支持的样式，比如只有a、span等文本类标签才支持文本样式。  
-另外需要注意，快应用的长度单位以manifest.json中config.designWidth的值为基准，该基准值最好设置为设计稿的宽度，然后直接按照设计稿中的px数据写样式就行了。最后再针对web项目使用[postcss-px2rem](https://www.npmjs.com/package/postcss-px2rem)将px转换为rem，快速开始[模板工程](https://github.com/Youjingyu/vue-hap)就是这样做的。当然，你也可以写rem，vue-hap-tools会用manifest.json中的基准宽度将rem转换为px，从而兼容快应用。
+另外需要注意，快应用的长度单位以manifest.json中config.designWidth的值为基准，该基准值最好设置为设计稿的宽度，然后直接按照设计稿中的px数据写样式就行了。最后再针对web项目使用[postcss-px2rem](https://www.npmjs.com/package/postcss-px2rem)将px转换为rem，快速开始[模板工程](https://github.com/Youjingyu/vue-hap)就是这样做的。当然，你也可以写rem，按照一般使用rem的惯例，vue-hap-tools会以 1rem=100px 的比率来将rem转为px，从而兼容快应用。
