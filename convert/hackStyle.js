@@ -33,6 +33,14 @@ const hackStyle = {
       selector: stringfy(selArr),
       log: logs.join('; ')
     };
+  },
+  convertRem: function(styleVal){
+    if (/([0-9]+)\.?([0-9]*)\s*rem/.test(styleVal)) {
+      styleVal = styleVal.split(/\s+/).map(item => {
+        return parseFloat(item, 10) * 100 + 'px';
+      }).join(' ');
+    }
+    return styleVal;
   }
 }
 module.exports = hackStyle;
