@@ -1,5 +1,5 @@
 const csswhat = require('css-what');
-const stringfy = require('./css-what-stringfy');
+const stringfy = require('./utils/css-what-stringfy');
 const tagConvertMap = require('./convertTpl.js').tagConvertMap;
 const utils = require("../lib/utils");
 

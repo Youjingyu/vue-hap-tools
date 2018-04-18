@@ -1,6 +1,6 @@
 const esprima = require("esprima");
 const escodegen = require("escodegen");
-const walk = require('./walk');
+const walk = require('./utils/walk');
 
 module.exports = function (jsString, tplRes) {
   const ast = esprima.parseModule(jsString);

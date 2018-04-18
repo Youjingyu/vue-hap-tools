@@ -1,7 +1,7 @@
 const compiler = require('vue-template-compiler');
 const esprima = require('esprima');
 const escodegen = require("escodegen");
-const walk = require('./walk');
+const walk = require('./utils/walk');
 const path = require('path');
 
 module.exports = function(source) {
