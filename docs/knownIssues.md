@@ -68,7 +68,9 @@
 - input不支持键盘相关事件（keyup、keydown等），监听input的改变只能使用input事件，vue-hap-tools会转为快应用支持的change事件
 - 事件绑定不支持表达式
 - 对于数组内容的直接修改，如this.arrayData[0].name='john'，快应用检测不到
+- v-for不支持循环对象
 #### TODO
+- 暂不支持获取、操作dom对象
 - radio、select暂不支持v-model
 ### vue-router问题
 - 如果使用了vue-router，需要在快应用的manifest中配置: {"features": [{"name": "system.router"}]}
