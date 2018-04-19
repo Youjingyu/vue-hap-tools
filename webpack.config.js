@@ -77,7 +77,7 @@ const webpackConf = {
       exclude: /node_modules/
     }, {
       test: /\.js/,
-      loaders: [path.resolve(__dirname, 'lib', 'module-loader.js'), 'babel-loader'],
+      loaders: [path.resolve(__dirname, 'lib', 'module-loader.js'), 'babel-loader', path.resolve(__dirname, 'convert/js-process')],
       exclude: function(path) {
         return /node_modules/.test(path) && !(new RegExp(moduleName).test(path))
       }
