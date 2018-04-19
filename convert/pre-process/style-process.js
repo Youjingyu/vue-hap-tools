@@ -1,9 +1,8 @@
 const csswhat = require('css-what');
-const stringfy = require('./utils/css-what-stringfy');
-const tagConvertMap = require('./convertTpl.js').tagConvertMap;
-const utils = require("../lib/utils");
+const stringfy = require('../utils/css-what-stringfy');
+const tagConvertMap = require('../convertTpl.js').tagConvertMap;
 
-const hackStyle = {
+module.exports = {
   hackSelector: function(selector){
     const selArr = csswhat(selector);
     const logs = [];
@@ -42,5 +41,4 @@ const hackStyle = {
     }
     return styleVal;
   }
-}
-module.exports = hackStyle;
+};

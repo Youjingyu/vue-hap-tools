@@ -1,4 +1,4 @@
-const commentDelete =  require('./utils/comment-delete');
+const commentDelete =  require('../utils/comment-delete');
 
 module.exports = function(jsStr){
   return commentDelete(jsStr, 'js');
