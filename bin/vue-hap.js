@@ -6,6 +6,8 @@ const chalk = require('chalk');
 const semver = require('semver');
 const spawn = require('cross-spawn');
 const requiredVersion = require('../package.json').engines.node;
+const fs = require('fs');
+const path = require('path');
 
 if (!semver.satisfies(process.version, requiredVersion)) {
   console.log(
@@ -34,8 +36,10 @@ if(!crossArgs) {
   console.log('Unknown script "' + args[0] + '".')
   process.exit(0)
 } else{
+  let crossEnv = path.resolve(__dirname, '../node_modules/.bin/cross-env');
+  crossEnv = fs.existsSync(crossEnv) ? crossEnv : path.resolve(process.cwd(), 'node_modules/.bin/cross-env');
   const result = spawn.sync(
-    'cross-env',
+    crossEnv,
     crossArgs,
     { stdio: 'inherit'}
   );
