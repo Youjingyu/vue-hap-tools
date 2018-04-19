@@ -56,7 +56,6 @@
 下面是样式中需要规避的点，未来会逐一解决
 - 快应用中div组件默认是display: flex，因此[标签转换列表](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/knownIssues.md#%E6%A0%87%E7%AD%BE%E8%BD%AC%E6%8D%A2%E5%88%97%E8%A1%A8)中div组件对应的html标签需要设置为display: flex
 - 不能依赖web标签的默认样式。比如h1、h2、p都会转换为div组件，其默认样式会丢失
-- 由于进行了标签转换，暂不支持标签选择器
 - class动态绑定支持对象写法，暂不支持数组写法
 - 动态绑定的style暂时只能写成:style="styleData"，不能写成:style="{'font-size': '100px'}"，且不支持style和:style同时写，不支持数组写法
 - border-color不支持rgb形式的颜色
