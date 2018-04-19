@@ -125,7 +125,7 @@ const webpackConf = {
     // GZIP压缩
     compress: true,
     inline: true,
-    setup: function(app) {
+    before: function(app) {
       // 访问记录
       app.all('*', function(req, res, next) {
           colorconsole.info(`[INFO] webpack-dev-server request: ${req.path}`)
