@@ -246,8 +246,6 @@ if (nodeConf.NODE_PHASE === 'dv') {
   // 携带sourceMap
   webpackConf.devtool = 'source-map'
 } else {
-  // 去重
-  webpackConf.plugins.push(new webpack.optimize.DedupePlugin())
     // JS压缩
   webpackConf.plugins.push(new webpack.optimize.UglifyJsPlugin({
     compress: {}
