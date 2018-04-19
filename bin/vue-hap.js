@@ -24,7 +24,8 @@ const argMap = {
   "build": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js"],
   "release": ["NODE_PLATFORM=na", "NODE_PHASE=ol", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js"],
   "server": ["NODE_MOUNTED_ROUTER=\"debug bundle\"", "node", "./node_modules/vue-hap-tools/debugger/server/index.js"],
-  "watch": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js", "--watch"]
+  "watch": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js", "--watch"],
+  "dev": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "NODE_MODE=dev", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js", "--watch"]  
 }
 
 const crossArgs = argMap[args[0]];

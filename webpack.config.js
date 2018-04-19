@@ -117,6 +117,14 @@ const webpackConf = {
         const secCost = (process.webpackDateE - process.webpackDateS) / 1000
         colorconsole.info(`Build Time Cost: ${secCost}s`)
       })
+    },
+    function(){
+      this.plugin('done', function() {
+        if(process.env.NODE_MODE === 'dev'){
+          process.env.NODE_MOUNTED_ROUTER = 'debug bundle';
+          require('./debugger/server/index.js');
+        }
+      })
     }
   ],
   // WebDevServer配置
