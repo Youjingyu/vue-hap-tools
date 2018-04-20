@@ -7,7 +7,7 @@
 | div | div;  p,h1,h2,h3,h4,h5,h6;  aside,footer,header,nav,main,section,figcaption,figure;   dd,dl,dt,ul,ol,li;  table,thead,tbody,td,th,tr;  fieldset,legend,article |  
 | block | template |  
 | progress | progress |  
-| text | span,strong,i,sub,sup,time,u,var,b,abbr,cite,code,em,q,address,pre,del,ins |  
+| text | span,strong,i,small,sub,sup,time,u,var,b,abbr,cite,code,em,q,address,pre,del,ins,mark |  
 | span | span嵌套的span |  
 | a | a,router-link |  
 | label | label |  
