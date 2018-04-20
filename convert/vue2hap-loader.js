@@ -1,17 +1,16 @@
-const compiler = require('vue-template-compiler');
 const esprima = require('esprima');
-const escodegen = require("escodegen");
+const escodegen = require('escodegen');
 const walk = require('./utils/walk');
 const path = require('path');
 
-module.exports = function(source) {
+module.exports = function (source) {
   var ast = esprima.parse(source);
   walk(ast, (node) => {
     var raw;
     if (node.type === 'VariableDeclarator' && node.init.callee.name === 'require') {
       raw = node.init.arguments[0].raw;
       node.init.arguments[0].raw = node.init.arguments[0].value = fixRaw(raw);
-    } else if(node.type === 'ExpressionStatement' && node.expression.callee && node.expression.callee.name === 'require'){
+    } else if (node.type === 'ExpressionStatement' && node.expression.callee && node.expression.callee.name === 'require') {
       raw = node.expression.arguments[0].raw;
       node.expression.arguments[0].raw = node.expression.arguments[0].value = fixRaw(raw);
     }
@@ -22,7 +21,7 @@ module.exports = function(source) {
   return jstpl;
 };
 
-function fixRaw(raw){
+function fixRaw (raw) {
   const convertPath = path.resolve(__dirname, 'index.js');
   var type = (/type=(.*?)!/).exec(raw)[1];
   var newraw = '!!';
@@ -33,6 +32,6 @@ function fixRaw(raw){
     }
     newraw += item + (isLast ? '' : '!');
   });
-  newraw = newraw.slice(0,-1);
+  newraw = newraw.slice(0, -1);
   return newraw;
 }

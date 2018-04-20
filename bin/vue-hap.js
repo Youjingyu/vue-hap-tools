@@ -23,25 +23,25 @@ if (!semver.satisfies(process.version, requiredVersion)) {
 const args = process.argv.slice(2);
 
 const argMap = {
-  "build": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js"],
-  "release": ["NODE_PLATFORM=na", "NODE_PHASE=ol", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js"],
-  "server": ["NODE_MOUNTED_ROUTER=\"debug bundle\"", "node", "./node_modules/vue-hap-tools/debugger/server/index.js"],
-  "watch": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js", "--watch"],
-  "dev": ["NODE_PLATFORM=na", "NODE_PHASE=dv", "NODE_MODE=dev", "webpack", "--config", "./node_modules/vue-hap-tools/webpack.config.js", "--watch"]  
+  'build': ['NODE_PLATFORM=na', 'NODE_PHASE=dv', 'webpack', '--config', './node_modules/vue-hap-tools/webpack.config.js'],
+  'release': ['NODE_PLATFORM=na', 'NODE_PHASE=ol', 'webpack', '--config', './node_modules/vue-hap-tools/webpack.config.js'],
+  'server': ['NODE_MOUNTED_ROUTER="debug bundle"', 'node', './node_modules/vue-hap-tools/debugger/server/index.js'],
+  'watch': ['NODE_PLATFORM=na', 'NODE_PHASE=dv', 'webpack', '--config', './node_modules/vue-hap-tools/webpack.config.js', '--watch'],
+  'dev': ['NODE_PLATFORM=na', 'NODE_PHASE=dv', 'NODE_MODE=dev', 'webpack', '--config', './node_modules/vue-hap-tools/webpack.config.js', '--watch']
 }
 
 const crossArgs = argMap[args[0]];
 
-if(!crossArgs) {
+if (!crossArgs) {
   console.log('Unknown script "' + args[0] + '".')
   process.exit(0)
-} else{
+} else {
   let crossEnv = path.resolve(__dirname, '../node_modules/.bin/cross-env');
   crossEnv = fs.existsSync(crossEnv) ? crossEnv : path.resolve(process.cwd(), 'node_modules/.bin/cross-env');
   const result = spawn.sync(
     crossEnv,
     crossArgs,
-    { stdio: 'inherit'}
+    {stdio: 'inherit'}
   );
   if (result.signal) {
     if (result.signal === 'SIGKILL') {

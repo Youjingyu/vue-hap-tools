@@ -1,0 +1,9 @@
+/build/
+/config/
+/dist/
+/*.js
+/test/
+/debugger/
+/docs/
+/lib/
+/sign/
