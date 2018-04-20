@@ -24,7 +24,7 @@ npm i vue-hap-tools --save-dev
 安装后需要在package.json的scripts字段中添加如下代码：
 ```json
 "scripts": {
-  "qa-dev": "npm run qa-watch & npm run qa-server",
+  "qa-dev": "vue-hap dev",
   "qa-server": "vue-hap server",
   "qa-watch": "vue-hap watch",
   "qa-build": "vue-hap build",
