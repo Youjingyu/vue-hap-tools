@@ -20,9 +20,9 @@ npm run qa-dev
 预览快应用效果需要在支持快应用的手机（如小米、华为）上安装[调试器](https://www.quickapp.cn/docCenter/post/69)、[预览工具](https://www.quickapp.cn/docCenter/post/69)。安装完成后，扫码即可查看效果。  
 下面是我们做的一个demo，同一套代码，分别在web和快应用上的效果  
 ***web效果***  
-![](https://github.com/Youjingyu/vue-hap-tools/raw/master/docs/quick-app-web.gif)  
+![web效果](https://github.com/Youjingyu/vue-hap-tools/raw/master/docs/quick-app-web.gif)  
 ***快应用效果***  
-![](https://github.com/Youjingyu/vue-hap-tools/raw/master/docs/quick-app.gif)
+![快应用效果](https://github.com/Youjingyu/vue-hap-tools/raw/master/docs/quick-app.gif)
 ## 其他
 [vue-hap-tools文档](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/doc.md)  
 [已知问题](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/knownIssues.md)
