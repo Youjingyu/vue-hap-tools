@@ -11,10 +11,8 @@ module.exports = function(scriptString){
       importDela.push(item);
     } else if (item.type === 'ExportDefaultDeclaration') {
       components = resolveExport(item);
-    } else {
-      // 非import、export代码
-      otherCode.push(item);
     }
+    // 其他代码省略...
   })
 
   // 遍历import的代码，与组件的值对比，拿到组件的名字与组件模块位置
