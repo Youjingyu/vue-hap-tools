@@ -19,7 +19,7 @@ module.exports = function(scriptString){
   importDela.forEach((importItem, index) => {
     // import的变量名
     const importName = importItem.specifiers[0].local.name
-    // import模块位置
+    // import模块的位置
     const value = importItem.source.value
     const componentName = getComponentsName(components, importName)
     if (componentName) {
@@ -73,5 +73,5 @@ function getComponentsName (components, importName) {
       return item.name
     }
   }
-  return false
+  return undefined
 }
