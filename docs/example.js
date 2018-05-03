@@ -1,3 +1,9 @@
+/**
+   * vue-hap-tools组件提取伪代码
+   * @param {String} scriptString script字符串
+   * @return {Array}
+   */
+
 const esprima = require('esprima');
 
 module.exports = function(scriptString){
