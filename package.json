@@ -32,7 +32,8 @@
     "lint": "./.bin/eslint src/",
     "na:dv": "cross-env NODE_PLATFORM=na NODE_PHASE=dv webpack --config ./webpack.config.js",
     "na:qa": "cross-env NODE_PLATFORM=na NODE_PHASE=qa webpack --config ./webpack.config.js",
-    "na:ol": "cross-env NODE_PLATFORM=na NODE_PHASE=ol webpack --config ./webpack.config.js"
+    "na:ol": "cross-env NODE_PLATFORM=na NODE_PHASE=ol webpack --config ./webpack.config.js",
+    "test":"mocha --recursive"
   },
   "dependencies": {
     "archiver": "^1.3.0",
