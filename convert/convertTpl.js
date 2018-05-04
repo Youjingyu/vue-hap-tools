@@ -184,7 +184,7 @@ function process (ast) {
           item.attrs[index].name = 'href';
         }
       });
-      // 删除重复的属性
+      // 删除多余的属性
       // 比如:class、class两个属性转换后会重复
       item.attrs = item.attrs.filter((cur, index) => {
         return attrToDeleteIndex.indexOf(index) < 0
