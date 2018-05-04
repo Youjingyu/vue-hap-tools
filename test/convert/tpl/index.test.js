@@ -6,9 +6,8 @@
 
 const chai = require('hybrid-chai/chai')
 const expect = chai.expect
-require('hybrid-mocha/mocha.js')
 
-const convertTpl = require('../../convert/convertTpl')
+const convertTpl = require('../../../convert/convertTpl')
 
 function getTpl(tpl){
   return convertTpl(tpl).tpl
