@@ -127,12 +127,13 @@ function resolveExport (exportAst, tplRes) {
     return propToDeleteIndex.indexOf(i) < 0;
   });
 
-  // 转换onInit钩子（添加数据的watch；computed数据添加getter；如果使用了路由，将路由绑定到this.$router）
-  const onInitFunc = resolveOnInit(onInitProp, watchRes.watches, computedRes.computedFuncs, routerRes.routerInfo);
-  if (onInitFunc) properties.push(onInitFunc);
   // 将computed数据添加到data初始化
   const dataFunc = getDataAst(computedRes.dataToInit, dataProp);
   if (dataFunc) properties.push(dataFunc);
+
+  // 转换onInit钩子（添加数据的watch；computed数据添加getter；如果使用了路由，将路由绑定到this.$router）
+  const onInitFunc = resolveOnInit(onInitProp, watchRes.watches, computedRes.computedFuncs, routerRes.routerInfo);
+  if (onInitFunc) properties.push(onInitFunc);
 
   // 如果有input change事件的回调，需要特殊处理
   if (tplRes.attrCollection) {
