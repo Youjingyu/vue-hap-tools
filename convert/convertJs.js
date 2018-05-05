@@ -90,7 +90,7 @@ function resolveExport (exportAst, tplRes) {
     watches: []
   }
   let onInitProp;
-  let dataProp = [];
+  let dataProp = null;
   let propToDeleteIndex = [];
   properties.forEach((prop, i) => {
     const name = prop.key.name;
@@ -131,7 +131,8 @@ function resolveExport (exportAst, tplRes) {
   const onInitFunc = resolveOnInit(onInitProp, watchRes.watches, computedRes.computedFuncs, routerRes.routerInfo);
   if (onInitFunc) properties.push(onInitFunc);
   // 将computed数据添加到data初始化
-  properties.push(getDataAst(computedRes.dataToInit, dataProp));
+  const dataFunc = getDataAst(computedRes.dataToInit, dataProp);
+  if (dataFunc) properties.push(dataFunc);
 
   // 如果有input change事件的回调，需要特殊处理
   if (tplRes.attrCollection) {
