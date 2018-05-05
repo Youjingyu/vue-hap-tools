@@ -1,0 +1,39 @@
+/**
+ * @author whale
+ * @fileOverview 模板转换测试
+ * @date 2018-05-04
+ */
+
+const chai = require('hybrid-chai/chai')
+const expect = chai.expect
+const fs = require('fs')
+const path = require('path')
+
+const convertJs = require('../../../convert/convertJs')
+function getJsString (jsString) {
+  return convertJs(jsString, {}).jsString
+}
+function getTplCode(codeDir) {
+  const dir = path.resolve(__dirname, './code-tpl', codeDir)
+  return {
+    sourceCode: fs.readFileSync(dir + '/index.js', 'utf-8'),
+    resCode: fs.readFileSync(dir + '/index.res.js', 'utf-8')
+  }
+}
+
+describe('js转换', () => {
+  it('生命周期映射', () => {
+    const { sourceCode, resCode } = getTplCode('lifecycle')
+    const jsString = getJsString(sourceCode)
+    expect(jsString).to.equal(resCode)
+  })
+  it('组件提取', () => {
+    const { sourceCode, resCode } = getTplCode('components')
+    const res = convertJs(sourceCode, {})
+    expect(res.jsString).to.equal(resCode)
+    expect(res.components).to.deep.equal([
+      { name: 'compPart1', value: '../components/compPart1' },
+      { name: 'comp-part2', value: '../components/compPart2' }
+    ])    
+  })
+})
