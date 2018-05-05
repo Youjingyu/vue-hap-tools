@@ -1,6 +1,6 @@
 /**
  * @author whale
- * @fileOverview 模板转换测试
+ * @fileOverview js转换测试
  * @date 2018-05-04
  */
 
@@ -44,5 +44,8 @@ describe('js转换', () => {
   })
   it('computed处理', () => {
     doExpect('computed')
+  })
+  it('watch处理', () => {
+    doExpect('watch')
   })
 })
