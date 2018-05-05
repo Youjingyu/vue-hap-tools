@@ -1,6 +1,6 @@
 /**
  * @author whale
- * @fileOverview 模板转换测试
+ * @fileOverview style转换测试
  * @date 2018-05-05
  */
 
