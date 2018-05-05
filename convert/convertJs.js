@@ -128,7 +128,8 @@ function resolveExport (exportAst, tplRes) {
   });
 
   // 转换onInit钩子（添加数据的watch；computed数据添加getter；如果使用了路由，将路由绑定到this.$router）
-  properties.push(resolveOnInit(onInitProp, watchRes.watches, computedRes.computedFuncs, routerRes.routerInfo));
+  const onInitFunc = resolveOnInit(onInitProp, watchRes.watches, computedRes.computedFuncs, routerRes.routerInfo);
+  if (onInitFunc) properties.push(onInitFunc);
   // 将computed数据添加到data初始化
   properties.push(getDataAst(computedRes.dataToInit, dataProp));
 
@@ -298,6 +299,7 @@ function resolveOnInit (onInitAst, watches, computedFuncs, routerInfo) {
     onInitAst.value.body.body = watchAst.concat(onInitAst.value.body.body);
     return onInitAst
   } else {
+    if (!code) return null;
     return getFuncAttrAst('onInit', code);
   }
 }
