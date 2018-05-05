@@ -67,4 +67,7 @@ describe('js转换', () => {
       }
     })
   })
+  it('路由处理', () => {
+    doExpect('router')
+  })
 })
