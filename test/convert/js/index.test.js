@@ -10,8 +10,8 @@ const fs = require('fs')
 const path = require('path')
 
 const convertJs = require('../../../convert/convertJs')
-function getJsString (jsString) {
-  return convertJs(jsString, {}).jsString
+function getJsString (jsString, extra = {}) {
+  return convertJs(jsString, extra).jsString
 }
 function getTplCode(codeDir) {
   const dir = path.resolve(__dirname, './code-tpl', codeDir)
@@ -20,9 +20,9 @@ function getTplCode(codeDir) {
     resCode: fs.readFileSync(dir + '/index.res.js', 'utf-8')
   }
 }
-function doExpect(type){
+function doExpect(type, extra = {}){
   const { sourceCode, resCode } = getTplCode(type)
-  const jsString = getJsString(sourceCode)
+  const jsString = getJsString(sourceCode, extra)
   expect(jsString).to.equal(resCode)
 }
 
@@ -47,5 +47,24 @@ describe('js转换', () => {
   })
   it('watch处理', () => {
     doExpect('watch')
+  })
+  it('事件回调处理', () => {
+    doExpect('event-callback', {
+      attrCollection: {
+        changeFuncsWithVModel: {
+          eventCallback: {
+            isCheckbox: true,
+            vModels: ['inputVal']
+          }
+        },
+        vModels: [
+          {
+            changeFunc: "_kyy_v_model_change_inputVal2",
+            dataName: "inputVal2",
+            isCheckbox: false
+          }
+        ]
+      }
+    })
   })
 })
