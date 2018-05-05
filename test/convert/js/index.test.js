@@ -20,12 +20,15 @@ function getTplCode(codeDir) {
     resCode: fs.readFileSync(dir + '/index.res.js', 'utf-8')
   }
 }
+function doExpect(type){
+  const { sourceCode, resCode } = getTplCode(type)
+  const jsString = getJsString(sourceCode)
+  expect(jsString).to.equal(resCode)
+}
 
 describe('js转换', () => {
   it('生命周期映射', () => {
-    const { sourceCode, resCode } = getTplCode('lifecycle')
-    const jsString = getJsString(sourceCode)
-    expect(jsString).to.equal(resCode)
+     doExpect('lifecycle')
   })
   it('组件提取', () => {
     const { sourceCode, resCode } = getTplCode('components')
@@ -35,5 +38,11 @@ describe('js转换', () => {
       { name: 'compPart1', value: '../components/compPart1' },
       { name: 'comp-part2', value: '../components/compPart2' }
     ])    
+  })
+  it('methods处理', () => {
+    doExpect('methods')
+  })
+  it('computed处理', () => {
+    doExpect('computed')
   })
 })
