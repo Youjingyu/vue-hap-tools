@@ -27,7 +27,22 @@
     "fs-extra": "^3.0.1",
     "parse5": "^3.0.0",
     "vue-template-compiler": "^2.5.16",
-    "walk": "^2.3.14"
+    "walk": "^2.3.14",
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "cross-env": "^5.1.4",
+    "css-what": "^2.1.0",
+    "hap-toolkit": "0.0.34",
+    "koa": "^2.3.0",
+    "koa-body": "^2.5.0",
+    "koa-router": "^7.2.1",
+    "koa-send": "^4.1.1",
+    "koa-static": "^4.0.1",
+    "socket.io": "^2.1.0",
+    "webpack": "^3.11.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
