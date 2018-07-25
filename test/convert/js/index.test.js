@@ -4,7 +4,7 @@
  * @date 2018-05-04
  */
 
-const chai = require('hybrid-chai/chai')
+const chai = require('chai')
 const expect = chai.expect
 const fs = require('fs')
 const path = require('path')
@@ -37,7 +37,7 @@ describe('js转换', () => {
     expect(res.components).to.deep.equal([
       { name: 'compPart1', value: '../components/compPart1' },
       { name: 'comp-part2', value: '../components/compPart2' }
-    ])    
+    ])
   })
   it('methods处理', () => {
     doExpect('methods')

@@ -4,7 +4,7 @@
  * @date 2018-05-05
  */
 
-const chai = require('hybrid-chai/chai')
+const chai = require('chai')
 const expect = chai.expect
 
 const { hackSelector, convertRem } = require('../../../convert/pre-process/style-process')

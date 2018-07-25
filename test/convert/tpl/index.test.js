@@ -4,7 +4,7 @@
  * @date 2018-05-04
  */
 
-const chai = require('hybrid-chai/chai')
+const chai = require('chai')
 const expect = chai.expect
 
 const convertTpl = require('../../../convert/convertTpl')
