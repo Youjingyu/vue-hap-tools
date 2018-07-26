@@ -1,13 +1,16 @@
 const path = require('path')
 const fsExtra = require('fs-extra')
 const walk = require('walk')
-const chokidar = require('chokidar')
-const convert = require('./convert')
+const childProcess = require('child_process')
 const fixSrcDir = require('./utils/fixSrcDir')
+const doConvert = require('./utils/doConvert')
+const {
+  src,
+  qaSrc
+} = require('./utils/getSrcDir')
 
 const defaultOption = {
-  watch: false,
-  sourceDir: 'src'
+  watch: false
 }
 
 module.exports = function (option = {}, cb = () => {}) {
@@ -15,9 +18,6 @@ module.exports = function (option = {}, cb = () => {}) {
   // 修改hap-toolkit的webpack.config.js的源码路径配置
   fixSrcDir.fixWebpackConfig((err) => {
     if (err) throw err
-
-    const src = path.join(process.cwd(), option.sourceDir)
-    const qaSrc = path.join(process.cwd(), 'qa-src')
 
     fsExtra.emptyDirSync(qaSrc)
 
@@ -30,25 +30,10 @@ module.exports = function (option = {}, cb = () => {}) {
       throw new Error('copy file error')
     })
     walker.on('end', function (root, nodeStatsArray, next) {
+      if (option.watch === true) {
+        childProcess.fork('./utils/watchFile.js')
+      }
       cb()
     })
-
-    if (option.watch === true) {
-      chokidar.watch(src).on('change', (event, filePath) => {
-        const qaPath = filePath.replace(src, qaSrc)
-        doConvert(filePath, qaPath)
-      })
-    }
   })
-}
-
-function doConvert (inputPath, outputPath, cb = () => {}) {
-  if (/\.vue$/.test(inputPath)) {
-    const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
-    fsExtra.outputFileSync(outputPath.replace(/\.vue$/, '.ux'), convert(fileContent))
-    cb(null)
-  } else {
-    fsExtra.copySync(inputPath, outputPath)
-    cb(null)
-  }
 }
