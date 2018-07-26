@@ -33,7 +33,7 @@ module.exports = function (option = {}, cb = () => {}) {
       if (option.watch === true) {
         // watch模式下，hap-toolkit将webpack以同步子进程的方式执行，
         // 文件变化的监听会被阻塞，因此需要在子进程中监听文件变化
-        childProcess.fork('./utils/watchFile.js')
+        childProcess.fork(path.join(__dirname, 'utils/watchFile.js'))
       }
       cb()
     })
