@@ -1,3 +1,3 @@
 module.exports = function (styleString) {
-  return styleString;
+  return styleString
 }

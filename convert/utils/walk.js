@@ -10,7 +10,7 @@ function walk (ast, fn) {
         for (j = 0, len = child.length; j < len; j += 1) {
           stack.push(child[j])
         }
-      } else if (child != void 0 && typeof child.type === 'string') {
+      } else if (child !== void 0 && typeof child.type === 'string') {
         stack.push(child)
       }
     }
@@ -34,7 +34,7 @@ walk.walkAddParent = function (ast, fn) {
             subchild.parent = node
             stack.push(subchild)
           }
-        } else if (child != void 0 && typeof child.type === 'string') {
+        } else if (child !== void 0 && typeof child.type === 'string') {
           child.parent = node
           stack.push(child)
         }
@@ -54,13 +54,13 @@ walk.walkWithCondition = function (ast, conditionFn, fn) {
         for (j = 0, len = child.length; j < len; j += 1) {
           subchild = child[j]
           if (conditionFn(subchild, node)) {
-            fn(subchild, node);
+            fn(subchild, node)
           }
           stack.push(subchild)
         }
-      } else if (child != void 0 && typeof child.type === 'string') {
+      } else if (child !== void 0 && typeof child.type === 'string') {
         if (conditionFn(child, node)) {
-          fn(child, node);
+          fn(child, node)
         }
         stack.push(child)
       }

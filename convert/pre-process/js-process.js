@@ -1,7 +1,7 @@
-const commentDelete = require('../utils/comment-delete');
+const commentDelete = require('../utils/comment-delete')
 
 module.exports = function (jsStr) {
-  this.cacheable && this.cacheable();
+  this.cacheable && this.cacheable()
 
-  return commentDelete(jsStr, 'js');
+  return commentDelete(jsStr, 'js')
 }
