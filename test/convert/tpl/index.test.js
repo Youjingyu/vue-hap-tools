@@ -8,6 +8,7 @@ const chai = require('chai')
 const expect = chai.expect
 
 const convertTpl = require('../../../convert/tpl')
+const tagConvertMap = require('../../../convert/tpl/tag-map')
 
 function getTpl(tpl){
   return convertTpl(tpl).tpl
@@ -15,7 +16,6 @@ function getTpl(tpl){
 
 describe('标签转换', () => {
   it('tag name', () => {
-    const tagConvertMap = convertTpl.tagConvertMap
     Object.keys(tagConvertMap).forEach(tagName => {
       expect(getTpl(`<${tagName}></${tagName}>`))
         .to.include(tagConvertMap[tagName])
@@ -23,7 +23,7 @@ describe('标签转换', () => {
   })
   it('button转换', () => {
     expect(getTpl('<button>text</button>'))
-        .to.equal('<input type="button" value="text">')
+        .to.equal('<input type="button" value="text"/>')
   })
 })
 describe('指令转换', () => {
@@ -66,9 +66,9 @@ describe('指令转换', () => {
       <input type="checkbox" v-model="inputVal3">
     `)
     expect(res.tpl).to.equal(`
-      <input value="{{inputVal}}" onchange="_kyy_v_model_change_inputVal">
-      <input value="{{inputVal2}}" onchange="inputFunc">
-      <input type="checkbox" checked="{{inputVal3}}" onchange="_kyy_v_model_change_inputVal3">
+      <input value="{{inputVal}}" onchange="_kyy_v_model_change_inputVal"/>
+      <input value="{{inputVal2}}" onchange="inputFunc"/>
+      <input type="checkbox" checked="{{inputVal3}}" onchange="_kyy_v_model_change_inputVal3"/>
     `)
     expect(res.attrCollection).to.deep.equal({
       changeFuncsWithVModel: {

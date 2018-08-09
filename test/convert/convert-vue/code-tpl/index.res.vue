@@ -5,8 +5,8 @@
     <comp-part1></comp-part1>
     <div class="title"><text class="title-text">Todos</text></div>
       <div class="new-todo-head">
-        <input class="new-todo" placeholder="What needs to be done?" value="{{newTodo.text}}" onchange="_kyy_v_model_change_newTodo.text">
-        <input onclick="addTodo" class="new-todo-btn" type="button" value="add">
+        <input class="new-todo" placeholder="What needs to be done?" value="{{newTodo.text}}" onchange="_kyy_v_model_change_newTodo.text"/>
+        <input onclick="addTodo" class="new-todo-btn" type="button" value="add"/>
         
       </div>
     </div>
@@ -14,7 +14,7 @@
       <div class="todo-list">
         <div class="todo" for="( i,todo) in showTodos">
           <div class="view">
-            <input type="checkbox" checked="{{todo.completed}}" onchange="toggleComplete">
+            <input type="checkbox" checked="{{todo.completed}}" onchange="toggleComplete"/>
             <div class="view-content" onclick="focusItem(i)"><text class="{{todo.completed?'view-content-text':''}}">{{todo.title}}</text></div>
             <div class="destroy"><text show="{{focusIndex === i}}" onclick="removeTodo(todo)" class="destroy-icon">x</text></div>
           </div>
