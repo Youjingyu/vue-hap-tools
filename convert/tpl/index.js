@@ -1,3 +1,4 @@
+require('./self-close-tag')
 var parse = require('parse5');
 
 // var HtmlTag = (function () {
