@@ -26,12 +26,12 @@ module.exports = function (vueFile) {
   let components = ''
   if (block.script) {
     const jsResult = convertJs(commentDelete(block.script.content, 'js'), tplRes)
-    js = `<script>${jsResult.jsString}</script>`
+    js = `<script>\n${jsResult.jsString}\n</script>`
 
     components = jsResult.components.reduce((res, cur) => {
-      return `${res}<import src="${cur.value}" name="${cur.name}"></import>`
+      return `${res}<import src="${cur.value}" name="${cur.name}"></import>\n`
     }, '')
   }
 
-  return `${components}${tpl}${js}${style}`
+  return `${components}${tpl}\n${js}\n${style}`
 }
