@@ -1,4 +1,5 @@
-<import src="../compPart1" name="comp-part1"></import><template>
+<import src="../compPart1" name="comp-part1"></import>
+<template>
 <div class="todoapp">
   <div class="header">
     <comp-part1></comp-part1>
@@ -21,7 +22,9 @@
       </div>
     </div>
   </div>
-</template><script>import todoStorage from './js/store';
+</template>
+<script>
+import todoStorage from './js/store';
 var filters = {
     all: function (todos) {
         return todos;
@@ -57,7 +60,9 @@ export default {
     },
     _kyy_watch_visibility() {
     }
-};</script><style>
+};
+</script>
+<style>
 @import "./css/index.css";
 @import '../../css/reset.css';
 

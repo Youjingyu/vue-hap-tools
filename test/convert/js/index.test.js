@@ -9,7 +9,7 @@ const expect = chai.expect
 const fs = require('fs')
 const path = require('path')
 
-const convertJs = require('../../../convert/convertJs')
+const convertJs = require('../../../convert/js')
 function getJsString (jsString, extra = {}) {
   return convertJs(jsString, extra).jsString
 }

@@ -1,6 +1,6 @@
 const csswhat = require('css-what');
 const stringfy = require('../utils/css-what-stringfy');
-const tagConvertMap = require('../convertTpl.js').tagConvertMap;
+const tagConvertMap = require('../tpl').tagConvertMap;
 
 module.exports = {
   hackSelector: function (selector) {

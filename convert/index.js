@@ -1,6 +1,6 @@
-const convertTpl = require('./convertTpl')
-const convertStyle = require('./convertStyle')
-const convertJs = require('./convertJs')
+const convertTpl = require('./tpl')
+const convertStyle = require('./style')
+const convertJs = require('./js')
 const commentDelete = require('./utils/comment-delete')
 const compiler = require('vue-template-compiler')
 

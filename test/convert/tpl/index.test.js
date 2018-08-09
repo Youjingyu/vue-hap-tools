@@ -7,7 +7,7 @@
 const chai = require('chai')
 const expect = chai.expect
 
-const convertTpl = require('../../../convert/convertTpl')
+const convertTpl = require('../../../convert/tpl')
 
 function getTpl(tpl){
   return convertTpl(tpl).tpl
