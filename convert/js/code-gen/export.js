@@ -1,5 +1,5 @@
 const escodegen = require('escodegen')
-const { getFuncAttrAst } = require('../utils')
+const { getFuncAttrAst } = require('../../utils')
 
 module.exports = function (methodNames, createdHookAst) {
   const resAst = []

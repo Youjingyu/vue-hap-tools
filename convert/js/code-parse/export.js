@@ -1,4 +1,4 @@
-const { resolveEventCallback } = require('../utils')
+const { resolveEventCallback } = require('../../utils')
 
 module.exports = function resolveExport (exportAst, tplRes = {}) {
   let properties = exportAst && exportAst.declaration && exportAst.declaration.properties

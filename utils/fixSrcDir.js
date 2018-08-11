@@ -11,6 +11,10 @@ module.exports = {
       if (err) return cb(err)
       // 为路径添加qa-前缀
       fileContent = fileContent.replace(/'(src|dist|build)'/g, `'qa-$1'`)
+      //  添加vue alias
+      if (!/resolve: {alias: /.test(fileContent)) {
+        fileContent = fileContent.replace('resolve: {', () => `resolve: {alias: {'vue$': '@whale-you/vue-core/index.js'},`)
+      }
       fs.writeFile(hapWebpackConfigPath, fileContent, (err) => {
         if (err) return cb(err)
         cb(null)

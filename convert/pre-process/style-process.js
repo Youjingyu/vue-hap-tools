@@ -1,5 +1,5 @@
 const csswhat = require('css-what')
-const stringfy = require('../utils/css-what-stringfy')
+const { cssStringify } = require('../utils')
 const tagConvertMap = require('../tpl/tag-map')
 
 module.exports = {
@@ -29,7 +29,7 @@ module.exports = {
       })
     })
     return {
-      selector: stringfy(selArr),
+      selector: cssStringify(selArr),
       log: logs.join('; ')
     }
   },

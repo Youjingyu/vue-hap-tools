@@ -1,6 +1,6 @@
 const genExportAst = require('./export')
 const genVueOptions = require('./vue-options')
-const { getStatementAst } = require('../utils')
+const { getStatementAst } = require('../../utils')
 
 module.exports = function (codeParseRes) {
   let resAst = []

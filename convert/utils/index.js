@@ -1,8 +1,15 @@
 const esprima = require('esprima')
+const commentDelete = require('./comment-delete')
+const cssStringify = require('./css-what-stringify')
 
 function getFuncAttrAst (name, funcBodyStr = '', param = '') {
   funcBodyStr = /^function/.test(funcBodyStr) ? funcBodyStr : `function(${param}){${funcBodyStr}}`
   const temp = `var a={'${name}':${funcBodyStr}}`
+  return esprima.parseScript(temp).body[0].declarations[0].init.properties[0]
+}
+
+function getAttrAst (key, value) {
+  const temp = `var a={${key}:${value}}`
   return esprima.parseScript(temp).body[0].declarations[0].init.properties[0]
 }
 
@@ -16,6 +23,10 @@ function getVModelAst (vModels, e, keyToPolyfill) {
 
 function getStatementAst (temp) {
   return esprima.parseScript(temp).body
+}
+
+function getImportAst (temp) {
+  return esprima.parseModule(temp).body
 }
 
 function resolveEventCallback (methods, attrCollection) {
@@ -55,7 +66,11 @@ function resolveEventCallback (methods, attrCollection) {
 
 module.exports = {
   getFuncAttrAst,
+  getAttrAst,
   getVModelAst,
   getStatementAst,
-  resolveEventCallback
+  resolveEventCallback,
+  commentDelete,
+  cssStringify,
+  getImportAst
 }
