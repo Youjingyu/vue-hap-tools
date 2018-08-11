@@ -1,7 +1,6 @@
 const convertTpl = require('./tpl')
 const convertStyle = require('./style')
 const convertJs = require('./js')
-const commentDelete = require('./utils/comment-delete')
 const compiler = require('vue-template-compiler')
 
 module.exports = function (vueFile) {
@@ -13,19 +12,19 @@ module.exports = function (vueFile) {
   // 写空标签会导致编译报错，因此无内容时，不能写空的style、script、template标签
   let tpl = ''
   if (block.template) {
-    tplRes = convertTpl(commentDelete(block.template.content, 'tpl'))
+    tplRes = convertTpl(block.template.content)
     tpl = `<template>${tplRes.tpl}</template>`
   }
 
   let style = ''
   if (block.styles && block.styles.length > 0) {
-    style = `<style>${convertStyle(commentDelete(block.styles[0].content, 'css'))}</style>`
+    style = `<style>\n${convertStyle(block.styles[0].content)}\n</style>`
   }
 
   let js = ''
   let components = ''
   if (block.script) {
-    const jsResult = convertJs(commentDelete(block.script.content, 'js'), tplRes)
+    const jsResult = convertJs(block.script.content, tplRes)
     js = `<script>\n${jsResult.jsString}\n</script>`
 
     components = jsResult.components.reduce((res, cur) => {

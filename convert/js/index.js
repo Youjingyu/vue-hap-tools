@@ -2,8 +2,13 @@ const esprima = require('esprima')
 const escodegen = require('escodegen')
 const codeParse = require('./code-parse')
 const codeGen = require('./code-gen')
+const { commentDelete } = require('../utils')
 
-module.exports = function (jsString, tplRes) {
+module.exports = function (jsString, tplRes, isJsFile) {
+  jsString = commentDelete(jsString)
+
+  if (isJsFile) return jsString
+
   const ast = esprima.parseModule(jsString)
 
   const codeParseRes = codeParse(ast.body, tplRes)

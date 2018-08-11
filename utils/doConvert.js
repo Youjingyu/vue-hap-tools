@@ -2,6 +2,7 @@ const fsExtra = require('fs-extra')
 const convert = require('../convert')
 const convertApp = require('../convert/app')
 const convertStyle = require('../convert/style')
+const convertJs = require('../convert/js')
 const { src } = require('./getSrcDir')
 
 module.exports = function (inputPath, outputPath, cb = () => {}) {
@@ -17,6 +18,10 @@ module.exports = function (inputPath, outputPath, cb = () => {}) {
   } else if (/.css$/.test(inputPath)) {
     const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
     fsExtra.outputFileSync(outputPath, convertStyle(fileContent))
+    cb(null)
+  } else if (/.js$/.test(inputPath)) {
+    const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
+    fsExtra.outputFileSync(outputPath, convertJs(fileContent, null, true))
     cb(null)
   } else {
     fsExtra.copySync(inputPath, outputPath)

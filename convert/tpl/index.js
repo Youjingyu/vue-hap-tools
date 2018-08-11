@@ -1,6 +1,7 @@
 require('./self-close-tag')
 const parse = require('parse5')
 const tagConvertMap = require('./tag-map')
+const { commentDelete } = require('../utils')
 
 const attrsConvert = {
   'v-for': {
@@ -254,6 +255,8 @@ function collectAttr (attrs) {
 }
 
 module.exports = function (tpl) {
+  tpl = commentDelete(tpl)
+
   attrCollection = {
     // 收集input事件的回调函数名（input事件会转为change事件），并将v-model值保存
     // 当绑定了input事件时，v-model的值保存在changeFuncs中

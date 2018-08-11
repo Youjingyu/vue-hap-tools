@@ -1,8 +1,11 @@
 const css = require('css')
 const hackSelector = require('./hack-selector')
 const rem2px = require('./rem-to-px')
+const { commentDelete } = require('../utils')
 
 module.exports = function (styleString) {
+  styleString = commentDelete(styleString, 'css')
+
   const imports = []
   styleString = styleString.replace(/@import\s+((?:['"]([^()]+?)['"])|(?:(?:url\(([^()]+?)\))))\s*;/g, (imp) => {
     imports.push(imp)
