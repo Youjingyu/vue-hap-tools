@@ -10,7 +10,7 @@ module.exports = function (codeStr, type) {
   if (type === 'js' || type === 'css') {
     return codeStr.replace(cssJsCommentReg, '')
   }
-  if (type === 'html') {
+  if (type === 'tpl') {
     return codeStr.replace(htmlCommentReg, '')
   }
   return codeStr.replace(cssJsCommentReg, '').replace(htmlCommentReg, '')

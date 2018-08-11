@@ -13,7 +13,7 @@ module.exports = function (vueFile) {
   // 写空标签会导致编译报错，因此无内容时，不能写空的style、script、template标签
   let tpl = ''
   if (block.template) {
-    tplRes = convertTpl(commentDelete(block.template.content, 'html'))
+    tplRes = convertTpl(commentDelete(block.template.content, 'tpl'))
     tpl = `<template>${tplRes.tpl}</template>`
   }
 

@@ -1,6 +1,7 @@
 const esprima = require('esprima')
 const commentDelete = require('./comment-delete')
 const cssStringify = require('./css-what-stringify')
+const logger = require('./logger')
 
 function getFuncAttrAst (name, funcBodyStr = '', param = '') {
   funcBodyStr = /^function/.test(funcBodyStr) ? funcBodyStr : `function(${param}){${funcBodyStr}}`
@@ -72,5 +73,6 @@ module.exports = {
   resolveEventCallback,
   commentDelete,
   cssStringify,
-  getImportAst
+  getImportAst,
+  logger
 }
