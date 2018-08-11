@@ -6,7 +6,7 @@ module.exports = function (methodNames, createdHookAst) {
 
   const dataAst = getFuncAttrAst('data', `
     const def = this.$app.$def
-    _qa_vue = def._qa_Vue(_qa_vue_options)
+    _qa_vue = new def._qa_Vue(_qa_vue_options)
     const vmData = def._qa_get_vm_data(_qa_vue)
     def._qa_bind_watch(this, _qa_vue, vmData)
     return vmData
