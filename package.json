@@ -6,6 +6,7 @@
   "subversion": {
     "toolkit": "0.0.34"
   },
+  "main": "./index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/Youjingyu/vue-hap-tools"
