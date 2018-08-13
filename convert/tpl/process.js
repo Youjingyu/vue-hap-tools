@@ -154,7 +154,7 @@ function collectAttr (attrs) {
   } else {
     if (vModel) {
       // 如果只有v-model，需要添加onchange事件
-      const autoName = `_kyy_v_model_change_${vModel}`
+      const autoName = `_qa_v_model_change_${vModel}`
       attrs.push({
         name: 'onchange',
         value: autoName
