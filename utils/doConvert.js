@@ -4,8 +4,10 @@ const convertApp = require('../convert/app')
 const convertStyle = require('../convert/style')
 const convertJs = require('../convert/js')
 const { src } = require('./getSrcDir')
+const logger = require('./logger')
 
 module.exports = function (inputPath, outputPath, cb = () => {}) {
+  logger.setFile(inputPath)
   if (/\.vue$/.test(inputPath) && !/app\.vue$/.test(inputPath)) {
     const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
     fsExtra.outputFileSync(outputPath.replace(/\.vue$/, '.ux'), convert(fileContent))
