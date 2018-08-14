@@ -42,7 +42,7 @@ module.exports = function resolveExport (exportAst, tplRes = {}) {
     createdHookAst: createdHook && createdHook.value,
     components,
     vueOptionsAst: properties,
-    methodNames: getMethodsName(methods)
+    methods
   }
 }
 
@@ -56,12 +56,4 @@ function getComponents (prop) {
     })
   })
   return components
-}
-
-function getMethodsName (methods) {
-  const res = []
-  methods.forEach((method) => {
-    res.push(method.key.name || method.key.value)
-  })
-  return res
 }

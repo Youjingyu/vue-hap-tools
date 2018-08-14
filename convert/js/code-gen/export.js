@@ -1,7 +1,7 @@
 const escodegen = require('escodegen')
-const { getFuncAttrAst } = require('../../utils')
+const { getFuncAttrAst, getFuncBodyAst } = require('../../utils')
 
-module.exports = function (methodNames, createdHookAst) {
+module.exports = function (methods, createdHookAst) {
   const resAst = []
 
   const dataAst = getFuncAttrAst('data', `
@@ -24,8 +24,12 @@ module.exports = function (methodNames, createdHookAst) {
   const onReadyAst = getFuncAttrAst('onReady', '_qa_vue.$mount()')
   resAst.push(onReadyAst)
 
-  methodNames.forEach(name => {
-    resAst.push(getFuncAttrAst(name, `_qa_vue['${name}'].apply(_qa_vue, arguments)`))
+  methods.forEach(method => {
+    const name = method.key.name || method.key.value
+    // method是引用类型，不能直接修改method，因为vueOptionsAst还需要用到method
+    const cloneMethod = JSON.parse(JSON.stringify(method))
+    cloneMethod.value.body = getFuncBodyAst(`_qa_vue['${name}'].apply(_qa_vue, arguments)`)
+    resAst.push(cloneMethod)
   })
 
   return {

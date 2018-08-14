@@ -29,6 +29,11 @@ function getImportAst (temp) {
   return esprima.parseModule(temp).body
 }
 
+function getFuncBodyAst (bodyStr) {
+  const func = `function a(){${bodyStr}}`
+  return esprima.parseScript(func).body[0].body
+}
+
 function resolveEventCallback (methods, attrCollection) {
   methods.forEach((method) => {
     const changeFuncsWithVModel = attrCollection.changeFuncsWithVModel[method.key.name]
@@ -72,5 +77,6 @@ module.exports = {
   resolveEventCallback,
   commentDelete,
   cssStringify,
-  getImportAst
+  getImportAst,
+  getFuncBodyAst
 }
