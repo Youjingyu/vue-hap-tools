@@ -1,61 +1,88 @@
-module.exports = {
-  'v-for': {
-    attr: 'for',
-    val: function (val) {
-      // eslint-disable-next-line
-      return val.replace(/\((.+),[]*(.+)\)/, '($2,$1)')
+const map = {
+  'v-for' (value, attrInfo) {
+    return {
+      name: 'for',
+      value: attrInfo.vFor.vForVal
     }
   },
-  'v-if': {
-    attr: 'if',
-    val: convertExpress
+  'v-if' (value) {
+    return {
+      name: 'if',
+      value: convertExpress(value)
+    }
   },
-  '^v-else-if$': {
-    attr: 'elif',
-    val: convertExpress
+  '^v-else-if$' (value) {
+    return {
+      name: 'elif',
+      value: convertExpress(value)
+    }
   },
-  '^v-else$': {
-    attr: 'else'
+  '^v-else$' (value) {
+    return {
+      name: 'else',
+      value
+    }
   },
-  'v-show': {
-    attr: 'show',
-    val: convertExpress
+  'v-show' (value) {
+    return {
+      name: 'show',
+      value: convertExpress(value)
+    }
   },
-  '^(:|v-bind:)(.*?)$': {
-    attr: function (name, regs) {
-      return regs[2]
-    },
-    val: function (val, regs, staticValue) {
-      // 处理style的写法
-      // if (type === 'style') {
-      //   return val.replace(/('|{|})/g, '');
-      // }
-      val = convertObjProp(val, regs[2])
-      var staticStr = ''
-      // 将bind的属性和静态属性合并，如:class和class
-      if (staticValue) {
-        // 将字符串用{{}}包裹，使hp-tools将其识别为变量
-        staticStr = staticValue.trim().split(/[ ]+/).reduce((total, cur) => {
-          return total + ' ' + convertExpress(`'${cur}'`)
-        }, '')
+  '^(:|v-bind:)(.*?)$' (value, attrInfo, matches) {
+    const name = matches[2]
+    // todo 支持对象形式的style
+    if (name !== 'class') {
+      return {
+        name,
+        value: convertExpress(value)
       }
-      return val + staticStr
+    }
+    value = convertObjProp(value)
+    const res = { name, value }
+    if (attrInfo.className) {
+      res.value = attrInfo.className.value + ' ' + value
+      res.indexToDelete = attrInfo.className.index
+    }
+    return res
+  },
+  'v-model' (value, attrInfo) {
+    let name = 'v-model'
+    const { nodeType } = attrInfo
+    let extra = {}
+    if (nodeType === 'text') {
+      name = 'value'
+      extra = resolveVModel(value, attrInfo, 'onchange', 'inputEventCb')
+    } else if (nodeType === 'radio' || nodeType === 'checkbox') {
+      name = 'checked'
+      extra = resolveVModel(value, attrInfo, 'onclick', 'clickEventCb')
+    }
+    return {
+      name,
+      value: convertExpress(value),
+      ...extra
     }
   },
-  '^(@|v-on:)(.*?)$': {
-    attr: function (name, regs) {
-      // 将输入框的input事件转为快应用的change事件
-      var type = regs[2] === 'input' ? 'change' : regs[2]
-      return 'on' + type
+  '^(@|v-on:)(.*?)$' (value, attrInfo, matches) {
+    return {
+      name: 'on' + matches[2],
+      value: value
     }
-  },
-  'v-model': {
-    attr: function (name, regs, extra) {
-      return extra.isCheckbox ? 'checked' : 'value'
-    },
-    val: function (val) {
-      return convertExpress(val)
+  }
+}
+
+module.exports = function (name, value, attrInfo) {
+  for (let key in map) {
+    const matches = name.match(new RegExp(key))
+    if (name.match(new RegExp(key))) {
+      const res = map[key](value, attrInfo, matches)
+      // console.log(res)
+      return res
     }
+  }
+  return {
+    name,
+    value
   }
 }
 
@@ -63,9 +90,9 @@ function convertExpress (val) {
   return '{{' + val + '}}'
 }
 
-function convertObjProp (prop, type) {
+function convertObjProp (prop) {
   // 转换对象形式的class
-  if (type === 'class' && /^{(.|\n|\t)+?}$/.test(prop)) {
+  if (/^{(.|\n|\t)+?}$/.test(prop)) {
     // 删除对象前后的括号，删除空白字符
     // hap-tools会以空格拆分表达式
     let keyValPair = prop.replace(/^([ ]*{)|(}[ ]*)$/g, '').replace(/\s+/g, '').split(',')
@@ -81,5 +108,63 @@ function convertObjProp (prop, type) {
     return keyValPair.join(' ')
   } else {
     return convertExpress(prop)
+  }
+}
+
+function parseEventCb (cbValue) {
+  cbValue = cbValue.trim().replace(/\)/, '')
+  let [cbName, paramsStr] = cbValue.split('(')
+  let params = []
+  if (paramsStr) {
+    paramsStr = paramsStr.trim()
+    params = paramsStr.split(/\s*,\s*/).map(param => {
+      return param.replace(/,|\(|\)/g, '')
+    })
+  }
+  return {
+    params,
+    cbName
+  }
+}
+
+let vModelId = 0
+function resolveVModel (vModelVal, attrInfo, event, eventCbKey) {
+  let indexToDelete
+  let cbParams = []
+  let codeGen = {
+    cbName: `_qa_vmodel_${vModelId}`,
+    vModelVal
+  }
+  vModelId++
+  // 是否已经存在v-model对应的事件
+  if (attrInfo[eventCbKey]) {
+    const { value, index } = attrInfo[eventCbKey]
+    const { cbName, params } = parseEventCb(value)
+    codeGen.originCb = {
+      params,
+      cbName
+    }
+    cbParams = params
+    indexToDelete = index
+  }
+  // v-model是否嵌套在v-for中
+  if (attrInfo.parentVFor) {
+    const { vForData, vForItem, vForIndex } = attrInfo.parentVFor
+    // v-model是否使用了v-for的变量
+    if (new RegExp('^' + vForItem).test(vModelVal)) {
+      cbParams.push(`{data:${vForData},index:${vForIndex}}`)
+      codeGen.vFor = {
+        data: vForData,
+        index: vForIndex
+      }
+    }
+  }
+  return {
+    attrToPush: {
+      name: event,
+      value: `${codeGen.cbName}` + (cbParams.length > 0 ? (`(${cbParams.join(',')})`) : '')
+    },
+    codeGen,
+    indexToDelete
   }
 }

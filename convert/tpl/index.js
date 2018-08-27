@@ -13,6 +13,6 @@ module.exports = function (tpl) {
   const processRes = process(ast)
   return {
     tpl: parse.serialize(processRes.ast),
-    attrCollection: processRes.attrCollection
+    codeGen: processRes.codeGen
   }
 }
