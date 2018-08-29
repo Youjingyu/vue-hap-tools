@@ -1,22 +1,58 @@
-const { getAttrAst, getFuncAttrAst } = require('../utils')
+const { getFuncAttrAst } = require('../utils')
 
 module.exports = function (exportStatement, vueDeclaName) {
   const prop = exportStatement.declaration.properties
 
-  prop.push(getAttrAst('_qa_Vue', vueDeclaName))
-  prop.push(getAttrAst('_qa_bind_watch', '_qa_bind_watch'))
-  prop.push(getFuncAttrAst('_qa_get_vm_data', `
+  prop.push(getFuncAttrAst('_qa_init_vue', `
+    const vm = new ${vueDeclaName}(vueOptions)
     // 确保当前 vm 所有数据被同步
     const dataKeys = [].concat(
       Object.keys(vm._data || {}),
-      Object.keys(vm._props || {}),
       Object.keys(vm._computedWatchers || {})
     );
-    return dataKeys.reduce(function (res, key) {
+    const vmData = dataKeys.reduce(function (res, key) {
       res[key] = vm[key];
       return res
     }, {})
-  `, 'vm'))
+    _qa_bind_watch(qaVm, vm, vmData)
+    vm.$emit = function () {
+      qaVm.$emit.apply(qaVm, arguments)
+      qaVm.$dispatch.apply(qaVm, arguments)
+    }
+    vm.$on = qaVm.$on.bind(qaVm)
+    vm.$off = qaVm.$off.bind(qaVm)
+    vm.$once = function (event, cb) {
+      qaVm.$on(event, () => {
+        cb && cb()
+        vm.$off(event)
+      })
+    }
+    vm._$set = vm.$set
+    vm.$set = function (target, key, value) {
+      vm._$set(target, key, value)
+      qaVm.$set(key, value)
+      vm.watch(target[key], (newVal) => {
+        qaVm[key] = newVal
+      })
+    }
+    vm._$delete = vm.$delete
+    vm.$delete = function () {
+      vm._$delete.apply(vm, arguments)
+      qaVm.$delete.apply(qaVm, arguments)
+    }
+    return {
+      vm,
+      vmData
+    }
+  `, 'qaVm, vueOptions'))
+  prop.push(getFuncAttrAst('_qa_handle_props', `
+    props.forEach((prop) => {
+      vm._$set(vm, prop, qaVm[prop])
+      qaVm.$watch(prop, (newVal) => {
+        vm[prop] = newVal
+      })
+    })
+  `, 'qaVm, vm, props'))
   prop.push(getFuncAttrAst('_qa_proxy', `
     const len = args.length
     const $event = _qa_wrap_event(args[len -1 ])

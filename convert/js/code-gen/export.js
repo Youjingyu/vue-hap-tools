@@ -1,14 +1,25 @@
 const escodegen = require('escodegen')
 const { getFuncAttrAst } = require('../../utils')
 
-module.exports = function (tplRes, createdHookAst) {
+module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
   const resAst = []
 
+  if (propsAst) {
+    resAst.push(propsAst)
+  }
+
+  let handleProps = ''
+  if (propsName.length > 0) {
+    const propsNameArr = propsName.map((name) => {
+      return `'${name}'`
+    })
+    handleProps = `def._qa_handle_props(this, vm, [${propsNameArr.join(',')}])`
+  }
   const dataAst = getFuncAttrAst('data', `
     const def = this.$app.$def
-    _qa_vue = new def._qa_Vue(_qa_vue_options)
-    const vmData = def._qa_get_vm_data(_qa_vue)
-    def._qa_bind_watch(this, _qa_vue, vmData)
+    const { vm, vmData } = def._qa_init_vue(this, _qa_vue_options)
+    _qa_vue = vm
+    ${handleProps}
     return vmData
   `)
   resAst.push(dataAst)

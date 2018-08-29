@@ -8,12 +8,19 @@ module.exports = function resolveExport (exportAst) {
 
   let createdHook
   let propToDeleteIndex = []
+  let propsName = []
+  let propsAst
   properties.forEach((prop, i) => {
     const name = prop.key.name
     switch (name) {
       case 'components':
         propToDeleteIndex.push(i)
         components = getComponents(prop)
+        break
+      case 'props':
+        propToDeleteIndex.push(i)
+        propsName = parseProps(prop)
+        propsAst = prop
         break
       case 'methods':
         break
@@ -32,7 +39,9 @@ module.exports = function resolveExport (exportAst) {
   return {
     createdHookAst: createdHook && createdHook.value,
     components,
-    vueOptionsAst: properties
+    vueOptionsAst: properties,
+    propsName,
+    propsAst
   }
 }
 
@@ -46,4 +55,18 @@ function getComponents (prop) {
     })
   })
   return components
+}
+
+function parseProps (prop) {
+  const propsName = []
+  if (prop.value.type === 'ArrayExpression') {
+    prop.value.elements.forEach((ele) => {
+      propsName.push(ele.value || ele.raw)
+    })
+  } else if (prop.value.type === 'ObjectExpression') {
+    prop.value.properties.forEach((ele) => {
+      propsName.push(ele.key.name || ele.key.raw)
+    })
+  }
+  return propsName
 }
