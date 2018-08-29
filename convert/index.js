@@ -24,7 +24,7 @@ module.exports = function (vueFile) {
   let js = ''
   let components = ''
   if (block.script) {
-    const jsResult = convertJs(block.script.content, tplRes)
+    const jsResult = convertJs(block.script.content, tplRes.codeGen)
     js = `<script>\n${jsResult.jsString}\n</script>`
 
     components = jsResult.components.reduce((res, cur) => {

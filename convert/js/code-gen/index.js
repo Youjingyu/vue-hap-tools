@@ -2,12 +2,12 @@ const genExportAst = require('./export')
 const genVueOptions = require('./vue-options')
 const { getStatementAst } = require('../../utils')
 
-module.exports = function (codeParseRes) {
+module.exports = function (codeParseRes, tplRes) {
   let resAst = []
   const { importDecla, otherCode, exportResult } = codeParseRes
-  const { createdHookAst, vueOptionsAst, methods } = exportResult
+  const { createdHookAst, vueOptionsAst } = exportResult
 
-  const exportAst = genExportAst(methods, createdHookAst)
+  const exportAst = genExportAst(tplRes, createdHookAst)
   const vueOptionsDecla = genVueOptions(vueOptionsAst)
 
   resAst = resAst.concat(importDecla, otherCode)

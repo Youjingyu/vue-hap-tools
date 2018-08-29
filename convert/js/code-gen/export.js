@@ -1,7 +1,7 @@
 const escodegen = require('escodegen')
-const { getFuncAttrAst, getFuncBodyAst } = require('../../utils')
+const { getFuncAttrAst } = require('../../utils')
 
-module.exports = function (methods, createdHookAst) {
+module.exports = function (tplRes, createdHookAst) {
   const resAst = []
 
   const dataAst = getFuncAttrAst('data', `
@@ -24,13 +24,48 @@ module.exports = function (methods, createdHookAst) {
   const onReadyAst = getFuncAttrAst('onReady', '_qa_vue.$mount()')
   resAst.push(onReadyAst)
 
-  methods.forEach(method => {
-    const name = method.key.name || method.key.value
-    // method是引用类型，不能直接修改method，因为vueOptionsAst还需要用到method
-    const cloneMethod = JSON.parse(JSON.stringify(method))
-    cloneMethod.value.body = getFuncBodyAst(`_qa_vue['${name}'].apply(_qa_vue, arguments)`)
-    resAst.push(cloneMethod)
-  })
+  const eventProxyAst = getFuncAttrAst('_qa_proxy', `
+    this.$app.$def._qa_proxy(arguments, _qa_vue)
+  `)
+  resAst.push(eventProxyAst)
+
+  if (tplRes && tplRes.vModels) {
+    tplRes.vModels.forEach(vModel => {
+      let { cbName, vModelVal, valAttr, originCb, vFor } = vModel
+      let funcBody = `
+        const len = arguments.length
+        const $event = arguments[len - 1]
+      `
+      // 如果v-model元素嵌套在v-for中，且使用了v-for的变量
+      if (vFor) {
+        funcBody += `
+          const _qa_vfor = arguments[len - 2]
+        `
+        // 将v-model值修改为v-for变量
+        const seg = vModelVal.split('.')
+        seg[0] = '_qa_vfor.d[_qa_vfor.i]'
+        vModelVal = seg.join('.')
+      } else {
+        vModelVal = '_qa_vue.' + vModelVal
+      }
+      funcBody += `${vModelVal} = $event.target.attr.${valAttr}`
+
+      // 如果存在与v-model冲突的事件，调用其回调函数
+      if (originCb) {
+        const { cbName, $eventIndex } = originCb
+        funcBody += `
+          const args = [].slice.call(arguments, 0, -2)
+          args.push(
+            {n:'${cbName}'${($eventIndex > -1 ? ',i:' + $eventIndex : '')}},
+            $event
+          )
+          this.$app.$def._qa_proxy(args, _qa_vue)
+        `
+      }
+      const vModelFunc = getFuncAttrAst(cbName, funcBody)
+      resAst.push(vModelFunc)
+    })
+  }
 
   return {
     'type': 'ExportDefaultDeclaration',

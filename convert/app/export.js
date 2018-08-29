@@ -17,6 +17,21 @@ module.exports = function (exportStatement, vueDeclaName) {
       return res
     }, {})
   `, 'vm'))
+  prop.push(getFuncAttrAst('_qa_proxy', `
+    const len = args.length
+    const $event = _qa_wrap_event(args[len -1 ])
+    const eventInfo = args[len - 2]
+    const eventCbName = eventInfo.n
+    const $usedEventIndex = eventInfo.i
+    args = [].slice.call(args, 0, -2)
+    if (args.length === 1 && args[0] === undefined){
+       args[0] = $event
+    }
+    if ($usedEventIndex !== undefined) {
+      args[$usedEventIndex] = $event
+    }
+    vm[eventCbName].apply(vm, args)
+  `, 'args, vm'))
 
   return exportStatement
 }

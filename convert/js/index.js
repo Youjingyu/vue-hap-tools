@@ -11,8 +11,8 @@ module.exports = function (jsString, tplRes, isJsFile) {
 
   const ast = esprima.parseModule(jsString)
 
-  const codeParseRes = codeParse(ast.body, tplRes)
-  const codeGenRes = codeGen(codeParseRes)
+  const codeParseRes = codeParse(ast.body)
+  const codeGenRes = codeGen(codeParseRes, tplRes)
 
   ast.body = codeGenRes
   // console.log(escodegen.generate(ast));

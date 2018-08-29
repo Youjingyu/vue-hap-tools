@@ -49,29 +49,6 @@ module.exports = function collectAttr (node) {
   }
 }
 
-// function parseEventCb (attrVal) {
-//   attrVal = attrVal.trim()
-//   let $eventIndex = -1
-//   let cbName = ''
-//   let params = []
-//   // 判断是否有参数
-//   if (/.+?\(.+?\)$/.test(attrVal)) {
-//     const matches = attrVal.match(/(.+?)\((.+?)\)$/)
-//     if (matches) {
-//       cbName = matches[1]
-//       params = matches[2].trim().split(/\s*,\s*/)
-//       $eventIndex = params.findIndex(ele => {
-//         return /^\$event$/.test(ele)
-//       })
-//     }
-//   }
-//   return {
-//     $eventIndex,
-//     cbName,
-//     params
-//   }
-// }
-
 function getVForInfo (vForVal) {
   const seg = vForVal.trim().match(/^\(?(.+?)\)?\s+in\s+(.+)/)
   if (!seg) {
@@ -88,7 +65,7 @@ function getVForInfo (vForVal) {
     vForData,
     vForItem,
     vForIndex,
-    vForVal: `(${vForItem},${vForIndex}) in ${vForData}`
+    vForVal: `(${vForIndex},${vForItem}) in ${vForData}`
   }
 }
 

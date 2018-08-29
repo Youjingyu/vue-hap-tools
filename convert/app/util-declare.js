@@ -1,7 +1,7 @@
 const { getStatementAst } = require('../utils')
 
-module.exports = function () {
-  return getStatementAst(`
+module.exports = {
+  bindWatch: getStatementAst(`
     function _qa_bind_watch ($qa, $vue, vmData, keyPath) {
       keyPath = keyPath || ''
       Object.keys(vmData).forEach((key) => {
@@ -21,6 +21,16 @@ module.exports = function () {
           })
         }
       })
+    }
+  `),
+  wrapEvent: getStatementAst(`
+    function _qa_wrap_event (e) {
+      return {
+        target: {
+          value: e.target.attr.value,
+          checked: e.target.attr.checked
+        }
+      }
     }
   `)
 }

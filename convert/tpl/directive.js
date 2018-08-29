@@ -52,10 +52,10 @@ const map = {
     let extra = {}
     if (nodeType === 'text') {
       name = 'value'
-      extra = resolveVModel(value, attrInfo, 'onchange', 'inputEventCb')
+      extra = resolveVModel(value, attrInfo, 'value', 'onchange', 'inputEventCb')
     } else if (nodeType === 'radio' || nodeType === 'checkbox') {
       name = 'checked'
-      extra = resolveVModel(value, attrInfo, 'onclick', 'clickEventCb')
+      extra = resolveVModel(value, attrInfo, 'checked', 'onchange', 'clickEventCb')
     }
     return {
       name,
@@ -64,9 +64,18 @@ const map = {
     }
   },
   '^(@|v-on:)(.*?)$' (value, attrInfo, matches) {
+    const { cbName, params } = parseEventCb(value)
+    let extraParam = `{n:'${cbName}'`
+    // 判断是否使用了$event变量
+    let $eventIndex = params.indexOf('$event')
+    if ($eventIndex > 0) {
+      extraParam += `,i:${$eventIndex}`
+    }
+    extraParam += '}'
+    params.push(extraParam)
     return {
       name: 'on' + matches[2],
-      value: value
+      value: `_qa_proxy(${params.join(',')})`
     }
   }
 }
@@ -128,21 +137,25 @@ function parseEventCb (cbValue) {
 }
 
 let vModelId = 0
-function resolveVModel (vModelVal, attrInfo, event, eventCbKey) {
+function resolveVModel (vModelVal, attrInfo, valAttr, event, eventCbKey) {
   let indexToDelete
   let cbParams = []
   let codeGen = {
     cbName: `_qa_vmodel_${vModelId}`,
-    vModelVal
+    vModelVal,
+    valAttr
   }
   vModelId++
   // 是否已经存在v-model对应的事件
   if (attrInfo[eventCbKey]) {
     const { value, index } = attrInfo[eventCbKey]
     const { cbName, params } = parseEventCb(value)
+    // 判断是否使用了$event变量
+    let $eventIndex = params.indexOf('$event')
     codeGen.originCb = {
       params,
-      cbName
+      cbName,
+      $eventIndex
     }
     cbParams = params
     indexToDelete = index
@@ -152,7 +165,7 @@ function resolveVModel (vModelVal, attrInfo, event, eventCbKey) {
     const { vForData, vForItem, vForIndex } = attrInfo.parentVFor
     // v-model是否使用了v-for的变量
     if (new RegExp('^' + vForItem).test(vModelVal)) {
-      cbParams.push(`{data:${vForData},index:${vForIndex}}`)
+      cbParams.push(`{d:${vForData},i:${vForIndex}}`)
       codeGen.vFor = {
         data: vForData,
         index: vForIndex

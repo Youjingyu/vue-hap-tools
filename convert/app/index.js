@@ -5,7 +5,7 @@ const resolveImport = require('./import')
 const resolveExport = require('./export')
 const routerHack = require('./router-hack')
 const vueMount = require('./vue-mount')
-const bindWatch = require('./bind-watch')
+const { bindWatch, wrapEvent } = require('./util-declare')
 
 module.exports = function (appFile, manifest) {
   const jsString = compiler.parseComponent(appFile).script.content
@@ -33,7 +33,8 @@ module.exports = function (appFile, manifest) {
 
   astBody = importDeclaRes.ast.concat(otherCode)
     .concat(vueMount(importDeclaRes.vueDeclaName))
-    .concat(bindWatch())
+    .concat(bindWatch)
+    .concat(wrapEvent)
   if (useRouter) {
     astBody = astBody.concat(routerHack(importDeclaRes.vueDeclaName))
   }

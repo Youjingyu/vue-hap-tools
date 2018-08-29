@@ -1,13 +1,10 @@
-const { resolveEventCallback } = require('../../utils')
-
-module.exports = function resolveExport (exportAst, tplRes = {}) {
+module.exports = function resolveExport (exportAst) {
   let properties = exportAst && exportAst.declaration && exportAst.declaration.properties
   if (!properties) {
     properties = []
   }
 
   let components = []
-  let methods = []
 
   let createdHook
   let propToDeleteIndex = []
@@ -19,7 +16,6 @@ module.exports = function resolveExport (exportAst, tplRes = {}) {
         components = getComponents(prop)
         break
       case 'methods':
-        methods = prop.value.properties
         break
       case 'created':
         propToDeleteIndex.push(i)
@@ -33,16 +29,10 @@ module.exports = function resolveExport (exportAst, tplRes = {}) {
     return propToDeleteIndex.indexOf(i) < 0
   })
 
-  // 如果有input change事件的回调，需要特殊处理
-  if (tplRes.attrCollection) {
-    methods = resolveEventCallback(methods, tplRes.attrCollection)
-  }
-
   return {
     createdHookAst: createdHook && createdHook.value,
     components,
-    vueOptionsAst: properties,
-    methods
+    vueOptionsAst: properties
   }
 }
 
