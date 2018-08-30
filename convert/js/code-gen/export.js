@@ -77,6 +77,14 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
       resAst.push(vModelFunc)
     })
   }
+  if (tplRes && tplRes.customEventCb) {
+    tplRes.customEventCb.forEach((cbName) => {
+      const cbFunc = getFuncAttrAst(cbName, `
+        _qa_vue['${cbName}'].call(_qa_vue, e.detail)
+      `, 'e')
+      resAst.push(cbFunc)
+    })
+  }
 
   return {
     'type': 'ExportDefaultDeclaration',

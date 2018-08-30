@@ -63,7 +63,19 @@ const map = {
       ...extra
     }
   },
-  '^(@|v-on:)(.*?)$' (value, attrInfo, matches) {
+  '^(@|v-on:)(.*?)$' (value, attrInfo, matches, components) {
+    // 由于快应用的bug，自定义事件的回调函数不能写成自执行传参的形式：cb(para1, para2)
+    // 不能做proxy，因此自定义组件的事件回调不做转换
+    const customComponentsIndex = components.findIndex((comp) => {
+      return comp.name === attrInfo.nodeType
+    })
+    if (customComponentsIndex > -1) {
+      return {
+        name: 'on' + matches[2],
+        value,
+        customEventCb: value
+      }
+    }
     const { cbName, params } = parseEventCb(value)
     let extraParam = `{n:'${cbName}'`
     // 判断是否使用了$event变量
@@ -80,11 +92,11 @@ const map = {
   }
 }
 
-module.exports = function (name, value, attrInfo) {
+module.exports = function (name, value, attrInfo, components = []) {
   for (let key in map) {
     const matches = name.match(new RegExp(key))
     if (name.match(new RegExp(key))) {
-      const res = map[key](value, attrInfo, matches)
+      const res = map[key](value, attrInfo, matches, components)
       // console.log(res)
       return res
     }
@@ -140,7 +152,7 @@ let vModelId = 0
 function resolveVModel (vModelVal, attrInfo, valAttr, event, eventCbKey) {
   let indexToDelete
   let cbParams = []
-  let codeGen = {
+  let vModel = {
     cbName: `_qa_vmodel_${vModelId}`,
     vModelVal,
     valAttr
@@ -152,7 +164,7 @@ function resolveVModel (vModelVal, attrInfo, valAttr, event, eventCbKey) {
     const { cbName, params } = parseEventCb(value)
     // 判断是否使用了$event变量
     let $eventIndex = params.indexOf('$event')
-    codeGen.originCb = {
+    vModel.originCb = {
       params,
       cbName,
       $eventIndex
@@ -166,7 +178,7 @@ function resolveVModel (vModelVal, attrInfo, valAttr, event, eventCbKey) {
     // v-model是否使用了v-for的变量
     if (new RegExp('^' + vForItem).test(vModelVal)) {
       cbParams.push(`{d:${vForData},i:${vForIndex}}`)
-      codeGen.vFor = {
+      vModel.vFor = {
         data: vForData,
         index: vForIndex
       }
@@ -175,9 +187,9 @@ function resolveVModel (vModelVal, attrInfo, valAttr, event, eventCbKey) {
   return {
     attrToPush: {
       name: event,
-      value: `${codeGen.cbName}` + (cbParams.length > 0 ? (`(${cbParams.join(',')})`) : '')
+      value: `${vModel.cbName}` + (cbParams.length > 0 ? (`(${cbParams.join(',')})`) : '')
     },
-    codeGen,
+    vModel,
     indexToDelete
   }
 }

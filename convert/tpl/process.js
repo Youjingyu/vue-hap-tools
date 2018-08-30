@@ -2,9 +2,9 @@ const tagConvertMap = require('./tag-map')
 const collectAttr = require('./collect-attr')
 const resolveDirective = require('./directive')
 
-let allCodeGen
+let codeGen
 
-function process (ast) {
+function process (ast, components) {
   if (ast.content) {
     ast.childNodes = ast.content.childNodes
   }
@@ -40,18 +40,21 @@ function process (ast) {
     const attrInfo = collectAttr(item)
     // 替换attrs
     item.attrs.forEach((attr, index) => {
-      const direcRes = resolveDirective(attr.name, attr.value, attrInfo)
-      const { name, value, indexToDelete, codeGen, attrToPush } = direcRes
+      const direcRes = resolveDirective(attr.name, attr.value, attrInfo, components)
+      const { name, value, indexToDelete, vModel, attrToPush, customEventCb } = direcRes
       item.attrs[index].name = name
       item.attrs[index].value = value
       if (indexToDelete) {
         attrToDeleteIndex.push(indexToDelete)
       }
-      if (codeGen) {
-        allCodeGen.vModels.push(codeGen)
+      if (vModel) {
+        codeGen.vModels.push(vModel)
       }
       if (attrToPush) {
         attrsToPush.push(attrToPush)
+      }
+      if (customEventCb) {
+        codeGen.customEventCb.push(customEventCb)
       }
       // 特殊处理
       if (attr.name === 'key') {
@@ -93,17 +96,18 @@ function process (ast) {
     if (item.tagName === 'text' && ast.tagName === 'text') {
       item.tagName = item.nodeName = 'span'
     }
-    process(item)
+    process(item, components)
   })
   return {
     ast,
-    codeGen: allCodeGen
+    codeGen: codeGen
   }
 }
 
-module.exports = function (ast) {
-  allCodeGen = {
-    vModels: []
+module.exports = function (ast, components) {
+  codeGen = {
+    vModels: [],
+    customEventCb: []
   }
-  return process(ast)
+  return process(ast, components)
 }

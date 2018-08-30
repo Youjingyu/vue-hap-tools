@@ -2,7 +2,7 @@ const fsExtra = require('fs-extra')
 const convert = require('../convert')
 const convertApp = require('../convert/app')
 const convertStyle = require('../convert/style')
-const convertJs = require('../convert/js')
+const { preProcess } = require('../convert/js')
 const { src } = require('./getSrcDir')
 const logger = require('./logger')
 
@@ -23,7 +23,7 @@ module.exports = function (inputPath, outputPath, cb = () => {}) {
     cb(null)
   } else if (/.js$/.test(inputPath)) {
     const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
-    fsExtra.outputFileSync(outputPath, convertJs(fileContent, null, true))
+    fsExtra.outputFileSync(outputPath, preProcess(fileContent))
     cb(null)
   } else {
     fsExtra.copySync(inputPath, outputPath)
