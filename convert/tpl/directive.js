@@ -64,6 +64,8 @@ const map = {
     }
   },
   '^(@|v-on:)(.*?)$' (value, attrInfo, matches, components) {
+    // 去除事件修饰符
+    const name = 'on' + matches[2].split('.')[0]
     // 由于快应用的bug，自定义事件的回调函数不能写成自执行传参的形式：cb(para1, para2)
     // 不能做proxy，因此自定义组件的事件回调不做转换
     const customComponentsIndex = components.findIndex((comp) => {
@@ -71,7 +73,7 @@ const map = {
     })
     if (customComponentsIndex > -1) {
       return {
-        name: 'on' + matches[2],
+        name,
         value,
         customEventCb: value
       }
@@ -86,7 +88,7 @@ const map = {
     extraParam += '}'
     params.push(extraParam)
     return {
-      name: 'on' + matches[2],
+      name,
       value: `_qa_proxy(${params.join(',')})`
     }
   }
