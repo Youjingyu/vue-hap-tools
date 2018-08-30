@@ -1,4 +1,10 @@
-const Serializer = require('../../node_modules/parse5/lib/serializer/index')
+let Serializer
+
+try {
+  Serializer = require('../../node_modules/parse5/lib/serializer/index')
+} catch (e) {
+  Serializer = require('../../../parse5/lib/serializer/index')
+}
 
 const selfCloseTags = [
   'area',
