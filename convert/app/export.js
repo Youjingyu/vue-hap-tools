@@ -4,6 +4,13 @@ module.exports = function (exportStatement, vueDeclaName) {
   const prop = exportStatement.declaration.properties
 
   prop.push(getFuncAttrAst('_qa_init_vue', `
+    if (props) {
+      const propsObj = {}
+      props.forEach(prop => {
+        propsObj[prop] = {default: qaVm[prop]}
+      })
+      vueOptions.props = propsObj
+    }
     const vm = new ${vueDeclaName}(vueOptions)
     // 确保当前 vm 所有数据被同步
     const dataKeys = [].concat(
@@ -55,15 +62,7 @@ module.exports = function (exportStatement, vueDeclaName) {
       vm,
       vmData
     }
-  `, 'qaVm, vueOptions'))
-  prop.push(getFuncAttrAst('_qa_handle_props', `
-    props.forEach((prop) => {
-      vm._$set(vm, prop, qaVm[prop])
-      qaVm.$watch(prop, (newVal) => {
-        vm[prop] = newVal
-      })
-    })
-  `, 'qaVm, vm, props'))
+  `, 'qaVm, vueOptions, props'))
   prop.push(getFuncAttrAst('_qa_proxy', `
     const len = args.length
     const $event = _qa_wrap_event(args[len -1 ])

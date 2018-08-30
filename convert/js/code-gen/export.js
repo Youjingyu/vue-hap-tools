@@ -8,18 +8,19 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
     resAst.push(propsAst)
   }
 
-  let handleProps = ''
-  if (propsName.length > 0) {
-    const propsNameArr = propsName.map((name) => {
+  let watchProps = ''
+  let propsParam = ''
+  if (propsName && propsName.length > 0) {
+    propsParam = propsName.map((name) => {
+      watchProps += `this.$watch('${name}', '_qa_props_${name}')\n`
       return `'${name}'`
-    })
-    handleProps = `def._qa_handle_props(this, vm, [${propsNameArr.join(',')}])`
+    }).join(',')
+    propsParam = `,[${propsParam}]`
   }
   const dataAst = getFuncAttrAst('data', `
     const def = this.$app.$def
-    const { vm, vmData } = def._qa_init_vue(this, _qa_vue_options)
+    const { vm, vmData } = def._qa_init_vue(this, _qa_vue_options${propsParam})
     _qa_vue = vm
-    ${handleProps}
     return vmData
   `)
   resAst.push(dataAst)
@@ -32,7 +33,10 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
     resAst.push(onInitAst)
   }
 
-  const onReadyAst = getFuncAttrAst('onReady', '_qa_vue.$mount()')
+  const onReadyAst = getFuncAttrAst('onReady', `
+    _qa_vue.$mount()
+    ${watchProps}
+  `)
   resAst.push(onReadyAst)
 
   const eventProxyAst = getFuncAttrAst('_qa_proxy', `
@@ -83,6 +87,13 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
         _qa_vue['${cbName}'].call(_qa_vue, e.detail)
       `, 'e')
       resAst.push(cbFunc)
+    })
+  }
+  if (propsName && propsName.length > 0) {
+    propsName.forEach((name) => {
+      resAst.push(getFuncAttrAst(`_qa_props_${name}`, `
+        _qa_vue['${name}'] = newVal
+      `, 'newVal'))
     })
   }
 
