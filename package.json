@@ -46,7 +46,8 @@
     "socket.io": "^2.1.0",
     "vue-template-compiler": "^2.5.16",
     "walk": "^2.3.14",
-    "webpack": "^3.11.0"
+    "webpack": "^3.11.0",
+    "@whale-you/vue-core": "2.5.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
