@@ -25,7 +25,8 @@ module.exports = function (astBody, tplRes) {
     if (componentName) {
       componentsCollection.push({
         name: componentName,
-        value
+        // 去除后缀名
+        value: value.replace(/\.vue$/, '')
       })
       indexToDelete.push(index)
     }
