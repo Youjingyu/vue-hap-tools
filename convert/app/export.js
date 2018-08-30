@@ -15,14 +15,25 @@ module.exports = function (exportStatement, vueDeclaName) {
       return res
     }, {})
     _qa_bind_watch(qaVm, vm, vmData)
-    vm.$emit = function () {
-      qaVm.$emit.apply(qaVm, arguments)
-      qaVm.$dispatch.apply(qaVm, arguments)
+    const convertEvent = (e) => {
+      return e.replace(/-./g, ($1) => {
+        return $1.substring(1).toUpperCase()
+      })
     }
-    vm.$on = qaVm.$on.bind(qaVm)
-    vm.$off = qaVm.$off.bind(qaVm)
-    vm.$once = function (event, cb) {
-      qaVm.$on(event, () => {
+    vm.$emit = function (e, data) {
+      e = convertEvent(e)
+      qaVm.$emit.call(qaVm, e, data);
+    }
+    vm.$on = function (e, cb) {
+      e = convertEvent(e)
+      qaVm.$on.call(qaVm, e, cb);
+    }
+    vm.$off = function (e) {
+      e = convertEvent(e)
+      qaVm.$off.call(qaVm, e);
+    }
+    vm.$once = function (e, cb) {
+      vm.$on(e, () => {
         cb && cb()
         vm.$off(event)
       })
