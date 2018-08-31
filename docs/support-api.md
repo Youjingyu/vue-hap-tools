@@ -1,5 +1,5 @@
 ### Vue基础特性支持情况
-与[Vue基础教程](https://cn.vuejs.org/v2/api)对应  
+与[Vue基础教程](https://cn.vuejs.org/v2/guide/)对应  
 
 | 特性 | 支持情况 | 备注 |
 |-----|-----|-----|

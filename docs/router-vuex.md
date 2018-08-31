@@ -12,6 +12,7 @@ new Vue({
 ```
 在快应用平台，则需要在app.ux中初始化，之后在页面以及组件中使用vuex的方式与web平台中相同：
 ```html
+<!-- app.ux文件 -->
 <script>
 import Vue from 'vue'
 import store from './store'
@@ -28,7 +29,7 @@ export default {}
 </script>
 ```
 ## 使用vue-router
-在web平台下，在入口js中引入vue-router：
+在web平台下，一般是在入口js中引入vue-router：
 ```javascript
 import Vue from 'vue'
 import App from './app.vue'
@@ -90,4 +91,4 @@ new Vue({
 
 ## 其他Vue插件
 从上面vuex、vue-router的使用可以看到，基本都是使用```Vue.mixin```在app.ux中将插件挂载到Vue实例，从而实现与web平台的使用方式一致。   
-对于其vue插件，也可以用类似的方式引入。需要注意的是，快应用中不存在DOM，并且其底层的虚拟DOM我们也不能控制，因此依赖DOM、虚拟DOM的插件可能不能像预期那样工作。
+对于其它vue插件，也可以用类似的方式引入。需要注意的是，快应用中不存在DOM，并且其底层的虚拟DOM我们也不能控制，因此依赖DOM、虚拟DOM的插件可能不能像预期那样工作。
