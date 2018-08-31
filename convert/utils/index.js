@@ -28,6 +28,9 @@ function getStatementAst (temp) {
 function getImportAst (temp) {
   return esprima.parseModule(temp).body
 }
+function getExportDefaultAst () {
+  return esprima.parseModule('export default {}').body[0]
+}
 
 function getFuncBodyAst (bodyStr) {
   const func = `function a(){${bodyStr}}`
@@ -42,5 +45,6 @@ module.exports = {
   commentDelete,
   cssStringify,
   getImportAst,
-  getFuncBodyAst
+  getFuncBodyAst,
+  getExportDefaultAst
 }

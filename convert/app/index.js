@@ -6,9 +6,11 @@ const resolveExport = require('./export')
 const routerHack = require('./router-hack')
 const vueMount = require('./vue-mount')
 const { bindWatch, wrapEvent } = require('./util-declare')
+const { getExportDefaultAst } = require('../utils')
 
 module.exports = function (appFile, manifest) {
-  const jsString = compiler.parseComponent(appFile).script.content
+  const script = compiler.parseComponent(appFile).script
+  const jsString = (script && script.content) || ''
   const ast = esprima.parseModule(jsString)
 
   let astBody
@@ -29,6 +31,9 @@ module.exports = function (appFile, manifest) {
   const useRouter = manifest.features &&
     manifest.features.findIndex(item => item.name === 'system.router') > -1
   const importDeclaRes = resolveImport(importDecla, useRouter)
+
+  if (!exportStatement) exportStatement = getExportDefaultAst()
+  console.log(exportStatement)
   exportStatement = resolveExport(exportStatement, importDeclaRes.vueDeclaName)
 
   astBody = importDeclaRes.ast.concat(otherCode)
