@@ -1,31 +1,8 @@
-const esprima = require('esprima')
+const acorn = require('acorn')
 const escodegen = require('escodegen')
 const codeParse = require('./code-parse')
 const codeGen = require('./code-gen')
 const { commentDelete } = require('../utils')
-
-module.exports = function (jsString, waitTpl) {
-  jsString = commentDelete(jsString)
-
-  if (!waitTpl) return jsString
-
-  const ast = esprima.parseModule(jsString)
-
-  const codeParseRes = codeParse(ast.body)
-  return new Promise((resolve) => {
-    waitTpl({components: codeParseRes.components}, (tplRes) => {
-      const codeGenRes = codeGen(codeParseRes, tplRes)
-      ast.body = codeGenRes
-      resolve(escodegen.generate(ast, {
-        format: {
-          indent: {
-            style: '  '
-          }
-        }
-      }))
-    })
-  })
-}
 
 function preProcess (jsString) {
   return commentDelete(jsString)
@@ -34,7 +11,10 @@ function preProcess (jsString) {
 module.exports = {
   preProcess,
   codeParse (jsString) {
-    const ast = esprima.parseModule(preProcess(jsString))
+    const ast = acorn.parse(preProcess(jsString), {
+      ecmaVersion: 10,
+      sourceType: 'module'
+    })
     return {
       res: codeParse(ast.body),
       ast

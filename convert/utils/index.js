@@ -1,16 +1,16 @@
-const esprima = require('esprima')
+const acorn = require('acorn')
 const commentDelete = require('./comment-delete')
 const cssStringify = require('./css-what-stringify')
 
 function getFuncAttrAst (name, funcBodyStr = '', param = '') {
   funcBodyStr = /^function/.test(funcBodyStr) ? funcBodyStr : `function(${param}){${funcBodyStr}}`
   const temp = `var a={'${name}':${funcBodyStr}}`
-  return esprima.parseScript(temp).body[0].declarations[0].init.properties[0]
+  return acorn.parse(temp, {sourceType: 'script'}).body[0].declarations[0].init.properties[0]
 }
 
 function getAttrAst (key, value) {
   const temp = `var a={${key}:${value}}`
-  return esprima.parseScript(temp).body[0].declarations[0].init.properties[0]
+  return acorn.parse(temp, {sourceType: 'script'}).body[0].declarations[0].init.properties[0]
 }
 
 function getVModelAst (vModels, e, keyToPolyfill) {
@@ -18,23 +18,23 @@ function getVModelAst (vModels, e, keyToPolyfill) {
   const jsStr = vModels.reduce((total, dataName) => {
     return total + `this.${dataName}=${e}.target.${keyToPolyfill};`
   }, '')
-  return esprima.parseScript(jsStr).body
+  return acorn.parse(jsStr, {sourceType: 'script'}).body
 }
 
 function getStatementAst (temp) {
-  return esprima.parseScript(temp).body
+  return acorn.parse(temp, {sourceType: 'script'}).body
 }
 
 function getImportAst (temp) {
-  return esprima.parseModule(temp).body
+  return acorn.parse(temp, {sourceType: 'module'}).body
 }
 function getExportDefaultAst () {
-  return esprima.parseModule('export default {}').body[0]
+  return acorn.parse('export default {}', {sourceType: 'module'}).body[0]
 }
 
 function getFuncBodyAst (bodyStr) {
   const func = `function a(){${bodyStr}}`
-  return esprima.parseScript(func).body[0].body
+  return acorn.parse(func, {sourceType: 'script'}).body[0].body
 }
 
 module.exports = {

@@ -1,4 +1,4 @@
-const esprima = require('esprima')
+const acorn = require('acorn')
 const escodegen = require('escodegen')
 const compiler = require('vue-template-compiler')
 const resolveImport = require('./import')
@@ -11,7 +11,10 @@ const { getExportDefaultAst } = require('../utils')
 module.exports = function (appFile, manifest) {
   const script = compiler.parseComponent(appFile).script
   const jsString = (script && script.content) || ''
-  const ast = esprima.parseModule(jsString)
+  const ast = acorn.parse(jsString, {
+    ecmaVersion: 10,
+    sourceType: 'module'
+  })
 
   let astBody
   let exportStatement
@@ -33,7 +36,6 @@ module.exports = function (appFile, manifest) {
   const importDeclaRes = resolveImport(importDecla, useRouter)
 
   if (!exportStatement) exportStatement = getExportDefaultAst()
-  console.log(exportStatement)
   exportStatement = resolveExport(exportStatement, importDeclaRes.vueDeclaName)
 
   astBody = importDeclaRes.ast.concat(otherCode)
