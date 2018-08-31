@@ -52,10 +52,10 @@ const map = {
     let extra = {}
     if (nodeType === 'text') {
       name = 'value'
-      extra = resolveVModel(value, attrInfo, 'value', 'onchange', 'inputEventCb')
+      extra = resolveVModel(value, attrInfo, 'value', 'onchange', 'changeEventCb')
     } else if (nodeType === 'radio' || nodeType === 'checkbox') {
       name = 'checked'
-      extra = resolveVModel(value, attrInfo, 'checked', 'onchange', 'clickEventCb')
+      extra = resolveVModel(value, attrInfo, 'checked', 'onchange', 'changeEventCb')
     }
     return {
       name,

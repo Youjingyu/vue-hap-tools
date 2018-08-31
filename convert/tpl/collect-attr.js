@@ -8,8 +8,9 @@ module.exports = function collectAttr (node) {
   let vModel
   let vFor
   let parentVFor = getParentVFor(node)
-  let clickEventCb
-  let inputEventCb
+  // let clickEventCb
+  // let inputEventCb
+  let changeEventCb
   let className
   let style
 
@@ -31,19 +32,23 @@ module.exports = function collectAttr (node) {
       if (vFor) {
         node.vFor = vFor
       }
-    } else if (/^(@|v-on:)click$/.test(name)) {
-      clickEventCb = { value, index }
-    } else if (/^(@|v-on:)input$/.test(name)) {
-      inputEventCb = { value, index }
+    } else if (/^(@|v-on:)change$/.test(name)) {
+      changeEventCb = { value, index }
     }
+    // else if (/^(@|v-on:)click$/.test(name)) {
+    //   clickEventCb = { value, index }
+    // } else if (/^(@|v-on:)input$/.test(name)) {
+    //   inputEventCb = { value, index }
+    // }
   })
   return {
     nodeType,
     vModel,
     vFor,
     parentVFor,
-    clickEventCb,
-    inputEventCb,
+    // clickEventCb,
+    // inputEventCb,
+    changeEventCb,
     className,
     style
   }
