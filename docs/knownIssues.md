@@ -61,34 +61,16 @@
 - border-color不支持rgb形式的颜色
 
 ### js问题
-- 如果初始化时v-model的值没有定义，v-model没有效果
-- 如果v-model和@input同时使用，@input事件的回调函数一定要在methods中定义，否则v-model不生效
-- 如果两个输入框都使用了v-model且都绑定了input事件，两个输入框的input事件的回调函数名不能相同，否则两个输入框会相互影响
-- input不支持键盘相关事件（keyup、keydown等），监听input的改变只能使用input事件，vue-hap-tools会转为快应用支持的change事件
+- 快应用输入框不支持键盘相关事件（keyup、keydown等），也不支持input事件，监听输入框值变化只能用change事件
 - 事件绑定不支持表达式
-- 对于数组内容的直接修改，如this.arrayData[0].name='john'，快应用检测不到
 - v-for不支持循环对象
+- 快应用的bug，自定义事件的回调函数不能加括号传参，比如下面这样写会报错：
+  ```html
+    <comp @customEvent="handle('someData')"></comp>
+  ```
+- 快应用的bug，列表中的checkbox会被复用，删除、添加列表项时，可能会错误地触发checkbox的onchange事件； 
+- 不支持watch $route变量 
+- 由于快应用会把页面间的数据直接绑定到this上，所以this实例上不应该有与上个页面传递的query数据的key冲突的属性，否则会出现覆盖问题
 #### TODO
 - 暂不支持获取、操作dom对象
 - radio、select暂不支持v-model
-### vue-router问题
-- 如果使用了vue-router，需要在快应用的manifest中配置: {"features": [{"name": "system.router"}]}
-- 使用vue-router的编程式导航时，path暂只支持全路径，不支持使用路由name。由于vue-router的限制，path为路径时，只能用query传递数据。
-- 页面间传递数据时，快应用会将数据转换为字符串。对于对象类型的数据以及对象内的数据，可以保证类型，但简单类型的数据不能保证类型，如:
-```javascript
-this.$router.push({
-  path: '/TodoMVC',
-  query: {
-    userInfo: {valid: true, cute: "true"},
-    flag1: "true",
-    flag2: true
-  }
-});
-// 在下一个页面判断数据类型
-typeof this.$route.query.userInfo.valid // boolean
-typeof this.$route.query.userInfo.cute // string
-typeof this.$route.query.flag1 // boolean
-typeof this.$route.query.flag2 // boolean
-```
-- 由于快应用会把页面间的数据直接绑定到this上，所以this实例上不应该有与上个页面传递的数据的key冲突的属性，否则会出现覆盖问题
-- 不支持watch $route变量
