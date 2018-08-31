@@ -18,7 +18,7 @@ npm run dev
 ```bash
 # 开启hot reload模式
 npm run qa-watch
-# 开启预览server，用手机扫描二维码安装应用
+# 开启预览server，用手机扫描二维码安装应用
 npm run qa-server
 ```
 预览快应用效果需要在支持快应用的手机（如小米、华为）上安装[调试器](https://www.quickapp.cn/docCenter/post/69)、[预览工具](https://www.quickapp.cn/docCenter/post/69)。安装完成后，扫码即可查看效果。  

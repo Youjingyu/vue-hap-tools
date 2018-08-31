@@ -69,7 +69,7 @@ new Vue({
 }
 ```
 在```features```字段中添加router的声明，告诉快应用，你需要使用路由，然后在```router```中添加页面信息，详情参考[manifest.json](https://doc.quickapp.cn/framework/manifest.html)    
-如果配置了路由信息，vue-hap-tools会自动在app.ux中引入@system.router，并将其挂载在Vue实例上，然后将其与vue-router的差异性抹平。但由于@system.router的限制，并不能完全实现vue-router的功能，暂时只支持下面的方法：  
+如果配置了路由信息，vue-hap-tools会自动在app.ux中引入@system.router，并将其挂载在Vue实例上，然后将其与vue-router的差异性抹平。但由于@system.router的限制，并不能完全实现vue-router的功能，暂时只支持下面的方法：  
 - router.push  
 只支持path跳转，path必须是页面路径（manifest.json中配置的路径）；页面传参只能用query；示例：
   ```javascript
@@ -88,6 +88,6 @@ new Vue({
   ```
 - router.back  
 
-## 其他Vue插件
-从上面vuex、vue-router的使用可以看到，基本都是使用```Vue.mixin```在app.ux中将插件挂载到Vue实例，从而实现与web平台的使用方式一致。   
-对于其vue插件，也可以用类似的方式引入。需要注意的是，快应用中不存在DOM，并且其底层的虚拟DOM我们也不能控制，因此依赖DOM、虚拟DOM的插件可能不能像预期那样工作。
+## 其他Vue插件
+从上面vuex、vue-router的使用可以看到，基本都是使用```Vue.mixin```在app.ux中将插件挂载到Vue实例，从而实现与web平台的使用方式一致。   
+对于其vue插件，也可以用类似的方式引入。需要注意的是，快应用中不存在DOM，并且其底层的虚拟DOM我们也不能控制，因此依赖DOM、虚拟DOM的插件可能不能像预期那样工作。
