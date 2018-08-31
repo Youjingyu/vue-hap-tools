@@ -31,6 +31,6 @@ npm run qa-server
 
 ## 更进一步
 [vue-hap-tools文档](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/doc.md)  
-[Vue api支持情况](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/support-api.md)   
+[vue api支持情况](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/support-api.md)   
 [使用vuex、vue-router](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/router-vuex.md)   
 [已知问题](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/knownIssues.md)  
