@@ -21,8 +21,12 @@ module.exports = function (option = {}, cb = () => {}) {
 
     fsExtra.emptyDirSync(qaSrc)
 
+    let hasBabelrc = false
     const walker = walk.walk(path.resolve(__dirname, src))
     walker.on('file', (root, fileStats, next) => {
+      if (/\.babelrc&/.test(fileStats.name)) {
+        hasBabelrc = true
+      }
       const filePath = path.resolve(root, fileStats.name)
       doConvert(filePath, filePath.replace(src, qaSrc), next)
     })
@@ -34,6 +38,14 @@ module.exports = function (option = {}, cb = () => {}) {
         // watch模式下，hap-toolkit将webpack以同步子进程的方式执行，
         // 文件变化的监听会被阻塞，因此需要在子进程中监听文件变化
         childProcess.fork(path.join(__dirname, 'utils/watchFile.js'))
+      }
+      if (!hasBabelrc) {
+        fsExtra.outputFileSync(qaSrc + '/.babelrc', `{
+  "presets": [
+    ["env", { "modules": false }],
+    "stage-3"
+  ]
+}`)
       }
       cb()
     })
