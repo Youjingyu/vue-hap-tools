@@ -6,8 +6,8 @@
 | 模板语法 | ✅ |  |
 | v-bind, :bind | ✅ |  |
 | v-on, @on | ⚠️ | 不支持修饰符 |
-| v-for | ✅ |  |
-| v-model | ⚠️ | 不支持修饰符，不支持在自定义组件上使用 |
+| v-for | ⚠️ | 不能遍历对象 |
+| v-model | ⚠️ | 不支持修饰符，不支持在自定义组件上使用；由于快应用限制，radio、select元素暂不支持v-model |
 | v-show | ✅ |  |
 | 条件渲染 | ✅ |  |
 | computed | ✅ |  |
@@ -38,13 +38,24 @@
 | Vue.version | ✅ |  |
 | 选项 / 数据 | ️️️️️️️️️️️️️️️✅ | |
 | 选项 / DOM | ❌ |  |
-| 选项 / 生命周期钩子 | ✅ |  |
+| 选项 / 生命周期钩子 |  |  |
+| beforeCreate | ✅ |  |
+| created | ✅ |  |
+| beforeMount | ✅ |  |
+| mounted | ✅ |  |
+| beforeUpdate | ❌ | 无法确定快应用视图更新时机 |
+| updated | ❌ | 无法确定快应用视图更新时机 |
+| activated | ❌ |  |
+| deactivated | ❌ |  |
+| beforeDestroy | ✅ |  |
+| destroyed | ✅ |  |
+| errorCaptured | ✅ |  |
 | 选项 / 资源 | ❌ |  |
 | 选项 / 组合 | ️️️️️️️️️️️️️️️⚠️ | 支持，不建议使用 |
 | 选项 / 其它 | ⚠️ | 部分支持，不建议使用 |
 | 实例属性 |  |  |
 | vm.$data | ✅ |  |
-| vm.$props | ❌ |  |
+| vm.$props | ✅ |  |
 | vm.$el | ❌ |  |
 | vm.$options | ✅ |  |
 | vm.$parent | ️️⚠️ | 获取到的是快应用元素对象 |
@@ -58,7 +69,7 @@
 | vm.$listers | ❌ |  |
 | 实例方法 / 数据 |  |  | 
 | vm.$watch | ✅ |  |
-| vm.$set | ✅ |  |
+| vm.$set | ⚠️ | 不能set嵌套数据，如不能vm.$set(vm.someData, key, data)，只能vm.$set(vm, key, data) |
 | vm.$delete | ✅ |  |
 | 实例方法 / 事件 |  |  |
 | vm.$on | ✅ |  |
