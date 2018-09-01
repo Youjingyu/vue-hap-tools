@@ -13,7 +13,7 @@
 | computed | ✅ |  |
 | watch | ✅ |  |
 | class绑定 | ️️️️✅ | |
-| style绑定 | ⚠️ | 当style、:style同时使用时，:style不支持数组绑定 |
+| style绑定 | ⚠️ | 当style、:style同时使用时，:style不支持数组绑定；不支持多重值 |
 | 自定义组件 | ️⚠️ | 不支持动态组件、异步组件 |  
 | 过度 & 动画 | ❌ |  |
 | 可复用性 & 组合 | ️⚠️ | 只支持混入、插件 |
@@ -48,11 +48,11 @@
 | vm.$el | ❌ |  |
 | vm.$options | ✅ |  |
 | vm.$parent | ️️⚠️ | 获取到的是快应用元素对象 |
-| vm.$root | ⚠️ | 获取到的是快应用元素对象 |
-| vm.$child | ⚠️ | 获取到的是快应用元素对象 |
+| vm.$root | ⚠️ | 获取到的是快应用root对象 |
+| vm.$children | ❌ | |
 | vm.$slots | ❌ |  |
 | vm.$scopedSlots | ❌ |  |
-| vm.$refs | ❌ |  |
+| vm.$refs | ️️⚠️ | 获取到的是快应用元素对象 |
 | vm.$isServer | ❌ |  |
 | vm.$attrs | ❌ |  |
 | vm.$listers | ❌ |  |

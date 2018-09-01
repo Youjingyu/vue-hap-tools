@@ -52,6 +52,31 @@
 </div>
 ```
 - 快应用中使用visibility切换元素是否可见存在bug，切换为visibility:visible后，再切换为visibility:hidden，不生效
+- style对象绑定中border样式不生效，比如
+```html
+<template>
+  <div :style=[styleObj]></div>
+</template>
+<script>
+  export default {
+    data () {
+      return {
+        styleObj: {
+          color: '#ccc',
+          border: '1px solid  #ccc' // 不生效
+        }
+      }
+    }
+  }
+</script>
+```
+- 当style、:style同时使用时，:style不支持数组绑定，比如
+```html
+<template>
+  <!-- styleObj无效 -->
+  <div style="color: red" :style=[styleObj]></div>
+</template>
+```
 #### TODO
 下面是样式中需要规避的点，未来会逐一解决
 - 快应用中div组件默认是display: flex，因此[标签转换列表](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/knownIssues.md#%E6%A0%87%E7%AD%BE%E8%BD%AC%E6%8D%A2%E5%88%97%E8%A1%A8)中div组件对应的html标签需要设置为display: flex
