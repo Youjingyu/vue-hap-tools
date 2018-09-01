@@ -25,10 +25,13 @@ module.exports = {
   `),
   wrapEvent: getStatementAst(`
     function _qa_wrap_event (e) {
+      const target = e.target
       return {
         target: {
-          value: e.target.attr.value,
-          checked: e.target.attr.checked
+          value: target.attr.value,
+          checked: target.attr.checked,
+          attr: target.attr,
+          target: target
         }
       }
     }
