@@ -1,4 +1,5 @@
-const { convertExpress, convertObjProp, resolveVModel, parseEventCb } = require('./utils')
+const { convertExpress, resolveVModel, parseEventCb } = require('./utils')
+const dynamicClassStyle = require('./class-style-bind')
 
 module.exports = {
   'v-for' (value, attrInfo) {
@@ -33,20 +34,31 @@ module.exports = {
   },
   '^(:|v-bind:)(.*?)$' (value, attrInfo, matches) {
     const name = matches[2]
-    // todo 支持对象形式的style
-    if (name !== 'class') {
-      return {
-        name,
-        value: convertExpress(value)
+    let val
+    let indexToDelete
+    // 动态绑定的class、style
+    if (name === 'class') {
+      val = dynamicClassStyle(value, 'class')
+      if (attrInfo.className) {
+        val = attrInfo.className.value + ' ' + val
+        indexToDelete = attrInfo.className.index
+        // console.log(val, indexToDelete)
       }
+    } else if (name === 'style') {
+      val = dynamicClassStyle(value, 'style')
+      if (attrInfo.style) {
+        val = val + ';' + attrInfo.style.value + ';'
+        indexToDelete = attrInfo.style.index
+      }
+    } else {
+      val = convertExpress(value)
     }
-    value = convertObjProp(value)
-    const res = { name, value }
-    if (attrInfo.className) {
-      res.value = attrInfo.className.value + ' ' + value
-      res.indexToDelete = attrInfo.className.index
+
+    return {
+      name,
+      value: val,
+      indexToDelete
     }
-    return res
   },
   'v-model' (value, attrInfo) {
     let name = 'v-model'
