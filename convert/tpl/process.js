@@ -44,7 +44,7 @@ function process (ast, components) {
       const { name, value, indexToDelete, vModel, attrToPush, customEventCb } = direcRes
       item.attrs[index].name = name
       item.attrs[index].value = value
-      if (indexToDelete) {
+      if (indexToDelete !== undefined) {
         attrToDeleteIndex.push(indexToDelete)
       }
       if (vModel) {
