@@ -71,8 +71,8 @@ module.exports = function (exportStatement, vueDeclaName) {
     const eventCbName = eventInfo.n
     const $usedEventIndex = eventInfo.i
     args = [].slice.call(args, 0, -2)
-    if (args.length === 1 && args[0] === undefined){
-       args[0] = $event
+    if (args.length === 0) {
+      args[0] = $event
     }
     if ($usedEventIndex !== undefined) {
       args[$usedEventIndex] = $event
