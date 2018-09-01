@@ -105,5 +105,22 @@ module.exports = {
       name,
       value: `_qa_proxy(${params.join(',')})`
     }
+  },
+  ref (value, attrInfo, matches, components) {
+    let refType = 'ele'
+    const customComponentsIndex = components.findIndex((comp) => {
+      return comp.name === attrInfo.nodeType
+    })
+    if (customComponentsIndex > -1) {
+      refType = 'comp'
+    }
+    return {
+      name: 'id',
+      value,
+      ref: {
+        type: refType,
+        name: value
+      }
+    }
   }
 }

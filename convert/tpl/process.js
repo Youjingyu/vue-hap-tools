@@ -41,7 +41,7 @@ function process (ast, components) {
     // 替换attrs
     item.attrs.forEach((attr, index) => {
       const direcRes = resolveDirective(attr.name, attr.value, attrInfo, components)
-      const { name, value, indexToDelete, vModel, attrToPush, customEventCb } = direcRes
+      const { name, value, indexToDelete, vModel, attrToPush, customEventCb, ref } = direcRes
       item.attrs[index].name = name
       item.attrs[index].value = value
       if (indexToDelete !== undefined) {
@@ -55,6 +55,9 @@ function process (ast, components) {
       }
       if (customEventCb) {
         codeGen.customEventCb.push(customEventCb)
+      }
+      if (ref) {
+        codeGen.refs.push(ref)
       }
       // 特殊处理
       if (attr.name === 'key') {
@@ -107,7 +110,8 @@ function process (ast, components) {
 module.exports = function (ast, components) {
   codeGen = {
     vModels: [],
-    customEventCb: []
+    customEventCb: [],
+    refs: []
   }
   return process(ast, components)
 }

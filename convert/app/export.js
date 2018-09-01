@@ -4,6 +4,7 @@ module.exports = function (exportStatement, vueDeclaName) {
   const prop = exportStatement.declaration.properties
 
   prop.push(getFuncAttrAst('_qa_init_vue', `
+    const { props } = extra
     if (props) {
       const propsObj = {}
       props.forEach(prop => {
@@ -62,7 +63,7 @@ module.exports = function (exportStatement, vueDeclaName) {
       vm,
       vmData
     }
-  `, 'qaVm, vueOptions, props'))
+  `, 'qaVm, vueOptions, extra'))
   prop.push(getFuncAttrAst('_qa_proxy', `
     const len = args.length
     const $event = _qa_wrap_event(args[len -1 ])

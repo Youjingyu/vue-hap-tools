@@ -9,17 +9,18 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
   }
 
   let watchProps = ''
-  let propsParam = ''
+  let extraData = []
   if (propsName && propsName.length > 0) {
-    propsParam = propsName.map((name) => {
+    let propsParam = propsName.map((name) => {
       watchProps += `this.$watch('${name}', '_qa_props_${name}')\n`
       return `'${name}'`
     }).join(',')
-    propsParam = `,[${propsParam}]`
+    extraData.push(`props:[${propsParam}]`)
   }
+
   const dataAst = getFuncAttrAst('data', `
     const def = this.$app.$def
-    const { vm, vmData } = def._qa_init_vue(this, _qa_vue_options${propsParam})
+    const { vm, vmData } = def._qa_init_vue(this, _qa_vue_options,{${extraData.join(',')}})
     _qa_vue = vm
     return vmData
   `)
@@ -33,8 +34,29 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
     resAst.push(onInitAst)
   }
 
+  let refsHack = `
+    _qa_vue.$root = this.$root()
+    _qa_vue.$parent = this.$parent()
+    _qa_vue.$refs = {}
+  `
+  if (tplRes && tplRes.refs.length > 0) {
+    refsHack += `
+      const that = this
+      const refs = ${JSON.stringify(tplRes.refs)}
+      refs.forEach((ref) => {
+        const refMethod = ref.type === 'ele' ? '$element' : '$child'
+        Object.defineProperty(_qa_vue.$refs, ref.name, {
+          get ()  {
+            return that[refMethod](ref.name)
+          }
+        })
+      })
+  `
+  }
+
   const onReadyAst = getFuncAttrAst('onReady', `
     _qa_vue.$mount()
+    ${refsHack}
     ${watchProps}
   `)
   resAst.push(onReadyAst)
