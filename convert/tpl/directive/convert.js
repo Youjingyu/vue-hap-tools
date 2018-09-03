@@ -96,7 +96,7 @@ module.exports = {
     let extraParam = `{n:'${cbName}'`
     // 判断是否使用了$event变量
     let $eventIndex = params.indexOf('$event')
-    if ($eventIndex > 0) {
+    if ($eventIndex > -1) {
       extraParam += `,i:${$eventIndex}`
     }
     extraParam += '}'
