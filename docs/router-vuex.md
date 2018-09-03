@@ -18,7 +18,7 @@ import Vue from 'vue'
 import store from './store'
 
 // 因为快应用中，Vue是在每个页面单独实例化的
-// 而vuex的默认是从vm.$options中查找store
+// 而vuex默认是从vm.$options中查找store
 // 为了不在每个页面引入store，因此使用mixin将store挂载到Vue实例
 Vue.mixin({ 
   beforeCreate () {

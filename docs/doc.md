@@ -18,7 +18,7 @@ src
 只要满足这个目录结构，vue-hap-tools就可以将源码编译到快应用平台。编译到web平台的方式由你自己决定（推荐使用快速开始[模板工程](https://github.com/Youjingyu/vue-hap)）。  
 - app.vue、main.js，可选；app.vue、main.js是针对web平台的入口文件，不做强制要求，取决于你如何打包到web平台
 - app.ux，必需；[app.ux](https://doc.quickapp.cn/framework/source-file.html)是快应用的入口文件，主要用于添加快应用中的全局方法，以及Vue全局配置，比如[使用vuex](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/router-vuex.md#%E4%BD%BF%E7%94%A8vuex)
-- manifest.json，必需；[manifest文件](https://doc.quickapp.cn/framework/manifest.html)manifest.json用于定义快应用相关信息，包括路由信息、桌面icon等，比如[使用vue-router](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/router-vuex.md#%E4%BD%BF%E7%94%A8vue-router)
+- manifest.json，必需；[manifest.json](https://doc.quickapp.cn/framework/manifest.html)用于定义快应用相关信息，包括路由信息、桌面icon等，比如[使用vue-router](https://github.com/Youjingyu/vue-hap-tools/blob/master/docs/router-vuex.md#%E4%BD%BF%E7%94%A8vue-router)
 - pages，可选；页面推荐放在pages目录中，但不是必须的，最终以manifest.json中配置的页面路径为准
 ## 使用
 安装：

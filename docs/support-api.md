@@ -50,7 +50,10 @@
 | beforeDestroy | ✅ |  |
 | destroyed | ✅ |  |
 | errorCaptured | ✅ |  |
-| 选项 / 资源 | ❌ |  |
+| 选项 / 资源 |  |  |
+| directives | ❌ |  |
+| filters | ❌ |  |
+| components | ✅ |  |
 | 选项 / 组合 | ️️️️️️️️️️️️️️️⚠️ | 支持，不建议使用 |
 | 选项 / 其它 | ⚠️ | 部分支持，不建议使用 |
 | 实例属性 |  |  |
@@ -64,9 +67,9 @@
 | vm.$slots | ❌ |  |
 | vm.$scopedSlots | ❌ |  |
 | vm.$refs | ️️⚠️ | 获取到的是快应用元素对象 |
-| vm.$isServer | ❌ |  |
+| vm.$isServer | ✅ |  |
 | vm.$attrs | ❌ |  |
-| vm.$listers | ❌ |  |
+| vm.$listeners | ❌ |  |
 | 实例方法 / 数据 |  |  | 
 | vm.$watch | ✅ |  |
 | vm.$set | ⚠️ | 不能set嵌套数据，如不能vm.$set(vm.someData, key, data)，只能vm.$set(vm, key, data) |
@@ -79,7 +82,7 @@
 | 实例方法 / 生命周期 |  |  | 
 | vm.$mount | ✅ |  |
 | vm.$forceUpdate | ✅ |  |
-| vm.$nextTick | ✅ |  |
+| vm.$nextTick | ❌ |  |
 | vm.$destroy | ✅ |  |
 | 指令 | ️️⚠️ | 不支持的有：v-text, v-html, v-pre, v-cloak, v-once |
 | 特殊特性 | ❌ |  |
