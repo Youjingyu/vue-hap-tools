@@ -25,15 +25,21 @@ module.exports = {
   `),
   wrapEvent: getStatementAst(`
     function _qa_wrap_event (e) {
-      const target = e.target
-      return {
-        target: {
-          value: target.attr.value,
-          checked: target.attr.checked,
-          attr: target.attr,
-          target: target
+      defineProp('value')
+      defineProp('checked')
+      function defineProp (key) {
+        if ((key in e.target.attr) && !(key in e.target)) {
+          Object.defineProperty(e.target, key, {
+            get () {
+              return e.target.attr[key]
+            },
+            set (value) {
+              e.target.attr[key] = value
+            }
+          })
         }
       }
+      return e
     }
   `)
 }
