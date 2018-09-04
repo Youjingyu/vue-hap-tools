@@ -73,3 +73,12 @@ const data = localStorage.getItem('data-key');
 /* quick app ignore end */
 ```
 vue-hap-tools只负责打包到快应用，因此可以在打包过程中去除部分针对web的代码。如果需要在web平台中去除针对快应用的代码，需要在打包到web的过程中处理；另外一个方式是，使用特殊变量（如快应用中没有window变量）来识别不同运行环境，从而实现差异性功能。
+## 排除文件
+默认情况下，vue-hap-tools会处理src下的所有文件，并对代码做检查，如果某些代码文件只是针对web平台的，可能会报一系列警告，为了避免这些无用的警告，你可以在manifest.json中配置忽略这些文件，配置遵从[minimatch](https://www.npmjs.com/package/minimatch)的规则：
+```json
+// manifest.json
+{ 
+  // ...其他配置
+  "vue-hap-ignore": ["css/web-reset.css"]
+}
+```
