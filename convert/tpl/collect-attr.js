@@ -10,7 +10,7 @@ module.exports = function collectAttr (node) {
   let parentVFor = getParentVFor(node)
   // let clickEventCb
   // let inputEventCb
-  let changeEventCb
+  let onchange
   let className
   let style
 
@@ -32,8 +32,8 @@ module.exports = function collectAttr (node) {
       if (vFor) {
         node.vFor = vFor
       }
-    } else if (/^(@|v-on:)change$/.test(name)) {
-      changeEventCb = { value, index }
+    } else if (/^(@|v-on:)change(\..+)?$/.test(name)) {
+      onchange = { value, index }
     }
     // else if (/^(@|v-on:)click$/.test(name)) {
     //   clickEventCb = { value, index }
@@ -48,7 +48,7 @@ module.exports = function collectAttr (node) {
     parentVFor,
     // clickEventCb,
     // inputEventCb,
-    changeEventCb,
+    onchange,
     className,
     style
   }

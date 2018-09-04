@@ -68,7 +68,7 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
 
   if (tplRes && tplRes.vModels) {
     tplRes.vModels.forEach(vModel => {
-      let { cbName, vModelVal, valAttr, originCb, vFor } = vModel
+      let { cbName, vModelVal, valAttr, originCb, vFor, modifiers } = vModel
       let funcBody = `
         const len = arguments.length
         const $event = arguments[len - 1]
@@ -85,7 +85,27 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
       } else {
         vModelVal = '_qa_vue.' + vModelVal
       }
-      funcBody += `${vModelVal} = $event.target.attr.${valAttr}`
+
+      funcBody += `
+        let _qa_value = $event.target.attr.${valAttr}
+      `
+      // 处理v-model的修饰符
+      if (modifiers && valAttr === 'value') {
+        if (modifiers.indexOf('trim') > -1) {
+          funcBody += `
+            if (_qa_value.trim) { _qa_value = _qa_value.trim() }
+          `
+        }
+        if (modifiers.indexOf('number') > -1) {
+          funcBody += `
+            if (/^(\\d)+(\\.(\\d)+)?$/.test(_qa_value)) {
+              _qa_value = Number(_qa_value)
+            }
+          `
+        }
+      }
+
+      funcBody += `${vModelVal} = _qa_value`
 
       // 如果存在与v-model冲突的事件，调用其回调函数
       if (originCb) {

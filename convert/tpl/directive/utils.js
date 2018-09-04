@@ -19,18 +19,19 @@ function parseEventCb (cbValue) {
 }
 
 let vModelId = 0
-function resolveVModel (vModelVal, attrInfo, valAttr, event, eventCbKey) {
+function resolveVModel (vModelVal, attrInfo, valAttr, event, modifiers) {
   let indexToDelete
   let cbParams = []
   let vModel = {
     cbName: `_qa_vmodel_${vModelId}`,
     vModelVal,
-    valAttr
+    valAttr,
+    modifiers
   }
   vModelId++
   // 是否已经存在v-model对应的事件
-  if (attrInfo[eventCbKey]) {
-    const { value, index } = attrInfo[eventCbKey]
+  if (attrInfo[event]) {
+    const { value, index } = attrInfo[event]
     const { cbName, params } = parseEventCb(value)
     // 判断是否使用了$event变量
     let $eventIndex = params.indexOf('$event')

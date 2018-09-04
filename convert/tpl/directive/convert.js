@@ -60,16 +60,18 @@ module.exports = {
       indexToDelete
     }
   },
-  'v-model' (value, attrInfo) {
+  '^(v-model)(\\.(.+))?$' (value, attrInfo, matches) {
     let name = 'v-model'
     const { nodeType } = attrInfo
+    // 修饰符
+    const modifiers = matches[3] && matches[3].split('.')
     let extra = {}
     if (nodeType === 'text') {
       name = 'value'
-      extra = resolveVModel(value, attrInfo, 'value', 'onchange', 'changeEventCb')
+      extra = resolveVModel(value, attrInfo, 'value', 'onchange', modifiers)
     } else if (nodeType === 'radio' || nodeType === 'checkbox') {
       name = 'checked'
-      extra = resolveVModel(value, attrInfo, 'checked', 'onchange', 'changeEventCb')
+      extra = resolveVModel(value, attrInfo, 'checked', 'onchange', modifiers)
     }
     return {
       name,
