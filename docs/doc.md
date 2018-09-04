@@ -79,6 +79,6 @@ vue-hap-tools只负责打包到快应用，因此可以在打包过程中去除�
 // manifest.json
 { 
   // ...其他配置
-  "vue-hap-ignore": ["css/web-reset.css"]
+  "vue-hap-ignore": ["css/for-web/*", "js/for-web/*"]
 }
 ```
