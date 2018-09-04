@@ -1,4 +1,5 @@
 .DS_Store
+.vscode
 node_modules/
 /dist/
 npm-debug.log*
@@ -15,3 +16,6 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+src
+/qa*
+test*

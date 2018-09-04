@@ -1,4 +1,5 @@
 .DS_Store
+.vscode
 .git
 node_modules/
 /dist/
@@ -18,3 +19,6 @@ selenium-debug.log
 *.sln
 
 /docs/
+src
+/qa*
+test*
