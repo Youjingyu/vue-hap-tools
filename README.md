@@ -4,7 +4,8 @@ vue-hap-tools基于自快应用官方脚手架[hap-toolkit](https://doc.quickapp
 ## 快速开始
 使用基于vue-cli的模板工程快速开始
 ```bash
-npm i -g vue-cli
+npm install -g @vue/cli
+npm install -g @vue/cli-init
 vue init Youjingyu/vue-hap my-project
 cd my-project
 # 或者执行 npm install
