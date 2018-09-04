@@ -4,6 +4,7 @@ const walk = require('walk')
 const childProcess = require('child_process')
 const fixSrcDir = require('./utils/fixSrcDir')
 const doConvert = require('./utils/doConvert')
+const isExclude = require('./utils/exclude')
 const {
   src,
   qaSrc
@@ -24,10 +25,14 @@ module.exports = function (option = {}, cb = () => {}) {
     let hasBabelrc = false
     const walker = walk.walk(path.resolve(__dirname, src))
     walker.on('file', (root, fileStats, next) => {
-      if (/\.babelrc&/.test(fileStats.name)) {
+      const name = fileStats.name
+      const filePath = path.resolve(root, name)
+      if (isExclude(filePath)) {
+        return next()
+      }
+      if (/\.babelrc&/.test(name)) {
         hasBabelrc = true
       }
-      const filePath = path.resolve(root, fileStats.name)
       doConvert(filePath, filePath.replace(src, qaSrc), next)
     })
     walker.on('errors', function (root, nodeStatsArray, next) {
