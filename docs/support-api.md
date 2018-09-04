@@ -26,7 +26,7 @@
 | Vue全局配置 | ✅ |  |
 | Vue全局Api |  |  |
 | Vue.extend | ✅ |  |
-| Vue.nextTick | ❌ | 虚拟DOM与真实节点均不受js控制，无法获取准确的视图更新时机 |
+| Vue.nextTick | ⚠️  | 与web中的行为可能不一致 |
 | Vue.set | ✅ |  |
 | Vue.delete | ✅ |  |
 | Vue.directive | ❌ |  |
@@ -82,7 +82,7 @@
 | 实例方法 / 生命周期 |  |  | 
 | vm.$mount | ✅ |  |
 | vm.$forceUpdate | ✅ |  |
-| vm.$nextTick | ❌ |  |
+| vm.$nextTick | ⚠️ | 与web中的行为可能不一致 |
 | vm.$destroy | ✅ |  |
 | 指令 | ️️⚠️ | 不支持的有：v-text, v-html, v-pre, v-cloak, v-once |
 | 特殊特性 | ❌ |  |
