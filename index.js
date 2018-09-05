@@ -45,7 +45,7 @@ module.exports = function (option = {}, cb = () => {}) {
         childProcess.fork(path.join(__dirname, 'utils/watchFile.js'))
       }
       if (!hasBabelrc) {
-        fsExtra.outputFileSync(qaSrc + '/.babelrc', `{
+        fsExtra.outputFileSync(path.join(qaSrc + '/.babelrc'), `{
   "presets": [
     ["env", { "modules": false }],
     "stage-3"
