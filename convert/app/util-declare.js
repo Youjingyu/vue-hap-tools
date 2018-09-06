@@ -1,6 +1,35 @@
 const { getStatementAst } = require('../utils')
 
 module.exports = {
+  clone: getStatementAst(`
+    function _qa_clone (vmData) {
+      return doClone(vmData)
+      function cloneObj (obj) {
+        const res = {}
+        Object.keys(obj).forEach((key) => {
+          res[key] = doClone(obj[key])
+        })
+        return res
+      }
+      function cloneArray (arr) {
+        const res = []
+        arr.forEach((item) => {
+          res.push(doClone(item))
+        })
+        return res
+      }
+      function doClone (data) {
+        const type = Object.prototype.toString.call(data)
+        if (type === '[object Object]') {
+          return cloneObj(data)
+        } else if (type === '[object Array]') {
+          return cloneArray(data)
+        } else {
+          return data
+        }
+      }
+    }
+  `),
   bindWatch: getStatementAst(`
     function _qa_bind_watch ($qa, $vue, vmData, keyPath) {
       keyPath = keyPath || ''
@@ -17,7 +46,7 @@ module.exports = {
             for (let i = 0; i < len; i++) {
               data = $qa[keyPathArr[i]]
             }
-            data[key] = newVal
+            data[key] = _qa_clone(newVal)
           })
         }
       })

@@ -61,7 +61,7 @@ module.exports = function (exportStatement, vueDeclaName) {
     }
     return {
       vm,
-      vmData
+      vmData: _qa_clone(vmData)
     }
   `, 'qaVm, vueOptions, extra'))
   prop.push(getFuncAttrAst('_qa_proxy', `

@@ -8,7 +8,7 @@ const { src } = require('./getSrcDir')
 const logger = require('./logger')
 
 const appPath = path.join(src, 'app.ux')
-const manifest = fsExtra.readJsonSync( path.join(src, 'manifest.json'))
+const manifest = fsExtra.readJsonSync(path.join(src, 'manifest.json'))
 
 module.exports = function (inputPath, outputPath, cb = () => {}) {
   logger.setFile(inputPath)
@@ -33,4 +33,3 @@ module.exports = function (inputPath, outputPath, cb = () => {}) {
     cb(null)
   }
 }
-``
