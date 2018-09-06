@@ -47,7 +47,7 @@ module.exports = {
               data = $qa[keyPathArr[i]]
             }
             data[key] = _qa_clone(newVal)
-          })
+          }, {deep: true})
         }
       })
     }
