@@ -2,13 +2,13 @@ const { convertExpress, resolveVModel, parseEventCb } = require('./utils')
 const dynamicClassStyle = require('./class-style-bind')
 
 module.exports = {
-  'v-for' (value, attrInfo) {
+  '^v-for$' (value, attrInfo) {
     return {
       name: 'for',
       value: attrInfo.vFor.vForVal
     }
   },
-  'v-if' (value) {
+  '^v-if$' (value) {
     return {
       name: 'if',
       value: convertExpress(value)
@@ -26,7 +26,7 @@ module.exports = {
       value
     }
   },
-  'v-show' (value) {
+  '^v-show$' (value) {
     return {
       name: 'show',
       value: convertExpress(value)
@@ -108,7 +108,7 @@ module.exports = {
       value: `_qa_proxy(${params.join(',')})`
     }
   },
-  ref (value, attrInfo, matches, components) {
+  '^ref$' (value, attrInfo, matches, components) {
     let refType = 'ele'
     const customComponentsIndex = components.findIndex((comp) => {
       return comp.name === attrInfo.nodeType
