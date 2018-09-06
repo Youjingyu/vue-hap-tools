@@ -48,7 +48,7 @@ function resolveVModel (vModelVal, attrInfo, valAttr, event, modifiers) {
     const { vForData, vForItem, vForIndex } = attrInfo.parentVFor
     // v-model是否使用了v-for的变量
     if (new RegExp('^' + vForItem).test(vModelVal)) {
-      cbParams.push(`{d:${vForData},i:${vForIndex}}`)
+      cbParams.push(`{d:'${vForData}',i:${vForIndex}}`)
       vModel.vFor = {
         data: vForData,
         index: vForIndex

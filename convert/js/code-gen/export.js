@@ -80,7 +80,7 @@ module.exports = function (tplRes, createdHookAst, propsName, propsAst) {
         `
         // 将v-model值修改为v-for变量
         const seg = vModelVal.split('.')
-        seg[0] = '_qa_vfor.d[_qa_vfor.i]'
+        seg[0] = '_qa_vue[_qa_vfor.d][_qa_vfor.i]'
         vModelVal = seg.join('.')
       } else {
         vModelVal = '_qa_vue.' + vModelVal
