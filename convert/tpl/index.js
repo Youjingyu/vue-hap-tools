@@ -1,4 +1,3 @@
-require('./self-close-tag')
 const { commentDelete } = require('../utils')
 const preProcess = require('./pre-process')
 const codeGen = require('./code-gen')
