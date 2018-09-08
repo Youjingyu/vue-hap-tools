@@ -83,4 +83,19 @@ function camelCaseToDash (str) {
   return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
 }
 
-module.exports = parseExpression
+module.exports = function (attrs) {
+  const { class: className = '', style = '' } = attrs
+  const bindClass = attrs[':class'] || attrs['v-bind:class']
+  const bindStyle = attrs[':style'] || attrs['v-bind:style']
+  if (bindClass) {
+    attrs.class = className + ' ' + parseExpression(bindClass, 'class')
+    delete attrs[':class']
+    delete attrs['v-bind:class']
+  }
+  if (bindStyle) {
+    attrs.style = style + ';' + parseExpression(bindClass, 'style')
+    delete attrs[':style']
+    delete attrs['v-bind:style']
+  }
+  return attrs
+}

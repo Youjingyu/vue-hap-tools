@@ -1,18 +1,17 @@
 require('./self-close-tag')
-const parse = require('parse5')
 const { commentDelete } = require('../utils')
-const process = require('./process')
+const preProcess = require('./pre-process')
+const codeGen = require('./code-gen')
+const globalId = require('./global-id')
 
-module.exports = function (tpl, codeParseRes = {}) {
-  tpl = commentDelete(tpl)
+module.exports = function (tpl, components) {
+  tpl = commentDelete(tpl, 'tpl')
+  globalId.reset()
 
-  let ast = parse.parseFragment(tpl, {
-    treeAdapter: parse.treeAdapters.default,
-    locationInfo: true
-  })
-  const processRes = process(ast, codeParseRes.components || [])
+  const { render, ast } = preProcess(tpl)
+
   return {
-    tpl: parse.serialize(processRes.ast),
-    codeGen: processRes.codeGen
+    ...codeGen(ast, components),
+    render
   }
 }
