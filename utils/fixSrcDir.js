@@ -25,7 +25,7 @@ module.exports = {
     fs.readFile(routesPath, 'utf8', (err, fileContent) => {
       if (err) return cb(err)
       // 为路径添加qa-前缀
-      fileContent = fileContent.replace('o=_path2.default.join(n,"dist")', 'o=_path2.default.join(n,"qa-dist")')
+      fileContent = fileContent.replace('a=_path2.default.join(n,"dist")', 'a=_path2.default.join(n,"qa-dist")')
       fs.writeFile(routesPath, fileContent, (err) => {
         if (err) return cb(err)
         cb(null)

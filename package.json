@@ -35,7 +35,7 @@
     "css-what": "^2.1.0",
     "escodegen": "~1.7.1",
     "fs-extra": "^3.0.1",
-    "hap-toolkit": "0.0.34",
+    "hap-toolkit": "0.0.36",
     "koa": "^2.3.0",
     "koa-body": "^2.5.0",
     "koa-router": "^7.2.1",
@@ -44,6 +44,7 @@
     "minimatch": "^3.0.4",
     "socket.io": "^2.1.0",
     "vue-template-compiler": "^2.5.16",
+    "vue-template-es2015-compiler": "^1.6.0",
     "walk": "^2.3.14",
     "webpack": "^3.11.0"
   },
