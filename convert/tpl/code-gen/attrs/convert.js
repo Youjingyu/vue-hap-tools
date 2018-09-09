@@ -79,7 +79,7 @@ module.exports = {
     })
     return {
       name,
-      value: `_qa_proxy({id:${eventId.value}})`
+      value: `_qa_proxy({id:${eventId && eventId.value}})`
     }
   },
   '^ref$' (value, ast, matches, components) {

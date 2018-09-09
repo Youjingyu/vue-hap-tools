@@ -13,6 +13,7 @@ module.exports = function (exportStatement, vueDeclaName) {
       vueOptions.props = propsObj
     }
     const vm = new ${vueDeclaName}(vueOptions)
+    qaVm._vm = vm
     // 确保当前 vm 所有数据被同步
     const dataKeys = [].concat(
       Object.keys(vm._data || {}),
@@ -28,31 +29,33 @@ module.exports = function (exportStatement, vueDeclaName) {
         return $1.substring(1).toUpperCase()
       })
     }
+    vm._$emit = vm.$emit
     vm.$emit = function (e, data) {
+      // vm._$emit.call(vm, e, data)
       e = convertEvent(e)
       qaVm.$emit.call(qaVm, e, data);
     }
+    vm._$on = vm.$on
     vm.$on = function (e, cb) {
+      // vm._$on.call(vm, e, cb)
       e = convertEvent(e)
       qaVm.$on.call(qaVm, e, cb);
     }
+    vm._$off = vm.$off
     vm.$off = function (e) {
+      // vm._$off.call(vm, e)
       e = convertEvent(e)
       qaVm.$off.call(qaVm, e);
-    }
-    vm.$once = function (e, cb) {
-      vm.$on(e, () => {
-        cb && cb()
-        vm.$off(event)
-      })
     }
     vm._$set = vm.$set
     vm.$set = function (target, key, value) {
       vm._$set(target, key, value)
-      qaVm.$set(key, value)
-      vm.watch(target[key], (newVal) => {
-        qaVm[key] = newVal
-      })
+      if (target === vm && !(key in qaVm) && (!/\\./.test(key))) {
+        qaVm.$set(key, value)
+        vm.$watch(key, (newVal) => {
+          qaVm[key] = newVal
+        })
+      }
     }
     vm._$delete = vm.$delete
     vm.$delete = function () {
@@ -66,18 +69,29 @@ module.exports = function (exportStatement, vueDeclaName) {
   `, 'qaVm, vueOptions, extra'))
   prop.push(getFuncAttrAst('_qa_proxy', `
     const len = args.length
-    const $event = _qa_wrap_event(args[len -1 ])
-    const eventInfo = args[len - 2]
-    const eventCbName = eventInfo.n
-    const $usedEventIndex = eventInfo.i
-    args = [].slice.call(args, 0, -2)
-    if (args.length === 0) {
-      args[0] = $event
+    const $event = args[len - 1]
+    const eventId = args[len - 2].id
+    // 不转换一遍，拿不到event属性
+    const target = JSON.parse(JSON.stringify($event.target))
+    let eventTypes = target.event || []
+    if (target.attr.type === 'text') {
+      const index = eventTypes.indexOf('change')
+      if (index > -1) eventTypes[index] = 'input'
+    } else if (target.attr.type === 'checkbox') {
+      // 快应用在触发click事件时，event类型不正确
+      const index = eventTypes.indexOf('change')
+      if (($event.checked === null || $event.checked === undefined) && index > -1) {
+        eventTypes.splice(index, 1)
+      }
     }
-    if ($usedEventIndex !== undefined) {
-      args[$usedEventIndex] = $event
+    const handles = _qa_get_handle(vm._vnode, eventId, eventTypes)
+    if (handles.length) {
+      const event = _qa_wrap_event($event, target)
+      if (handles.length === 1) {
+        return handles[0](event)
+      }
+      handles.forEach(h => h(event))
     }
-    vm[eventCbName].apply(vm, args)
   `, 'args, vm'))
 
   return exportStatement

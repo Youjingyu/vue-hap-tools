@@ -1,7 +1,7 @@
 const csswhat = require('css-what')
 const { cssStringify } = require('../utils')
 const logger = require('../../utils/logger')
-const tagConvertMap = require('../tpl/tag-map')
+const tagConvertMap = require('../tpl/code-gen/tag-map')
 
 module.exports = function (selectors) {
   const res = []

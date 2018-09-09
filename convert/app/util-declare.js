@@ -53,22 +53,42 @@ module.exports = {
     }
   `),
   wrapEvent: getStatementAst(`
-    function _qa_wrap_event (e) {
-      defineProp('value')
-      defineProp('checked')
-      function defineProp (key) {
-        if ((key in e.target.attr) && !(key in e.target)) {
-          Object.defineProperty(e.target, key, {
-            get () {
-              return e.target.attr[key]
-            },
-            set (value) {
-              e.target.attr[key] = value
+    function _qa_wrap_event (e, target) {
+      target.value = e.value
+      target.checked = e.checked
+      Object.defineProperty(e, 'target', {
+        value: target
+      })
+      return e
+    }
+  `),
+  getHandle: getStatementAst(`
+    function _qa_get_handle (vnode, eventid, eventTypes) {
+      let res = []
+      if (!vnode || !vnode.tag) {
+        return res
+      }
+      let { data, children } = vnode || {}
+      if (children) {
+        children.forEach(node => {
+          res = res.concat(_qa_get_handle(node, eventid, eventTypes))
+        })
+      }
+      if (data) {
+        const { attrs, on } = data || {}
+        if (attrs && on && attrs['data-eventid'] === eventid) {
+          eventTypes.forEach(et => {
+            const h = on[et]
+            if (typeof h === 'function') {
+              res.push(h)
+            } else if (Array.isArray(h)) {
+              res = res.concat(h)
             }
           })
+          return res
         }
       }
-      return e
+      return res
     }
   `)
 }

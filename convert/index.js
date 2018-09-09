@@ -18,14 +18,14 @@ module.exports = function (vueFile) {
   // 写空标签会导致编译报错，因此无内容时，不能写空的style、script、template标签
   let tpl = ''
   if (block.template) {
-    tplRes = convertTpl(block.template.content, codeParseRes && codeParseRes.res)
-    tpl = `<template>${tplRes.tpl}</template>`
+    tplRes = convertTpl(block.template.content, codeParseRes && codeParseRes.res && codeParseRes.res.components)
+    tpl = `<template>\n${tplRes.tpl}\n</template>`
   }
 
   let js = ''
   let components = ''
   if (codeParseRes) {
-    js = `<script>\n${codeGen(codeParseRes, tplRes.codeGen)}\n</script>`
+    js = `<script>\n${codeGen(codeParseRes, tplRes)}\n</script>`
     components = codeParseRes.res.components.reduce((res, cur) => {
       return `${res}<import src="${cur.value}" name="${cur.name}"></import>\n`
     }, '')

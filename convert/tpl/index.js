@@ -7,10 +7,11 @@ module.exports = function (tpl, components) {
   tpl = commentDelete(tpl, 'tpl')
   globalId.reset()
 
-  const { render, ast } = preProcess(tpl)
+  const { render, staticRenderFns, ast } = preProcess(tpl)
 
   return {
     ...codeGen(ast, components),
-    render
+    render,
+    staticRenderFns
   }
 }
