@@ -28,7 +28,7 @@
 | Vue全局配置 | ✅ |  |
 | Vue全局Api |  |  |
 | Vue.extend | ✅ |  |
-| Vue.nextTick | ⚠️  | 与web中的行为可能不一致 |
+| Vue.nextTick | ✅  |  |
 | Vue.set | ✅ |  |
 | Vue.delete | ✅ |  |
 | Vue.directive | ❌ |  |
@@ -45,8 +45,8 @@
 | created | ✅ |  |
 | beforeMount | ✅ |  |
 | mounted | ✅ |  |
-| beforeUpdate | ❌ | 无法确定快应用视图更新时机 |
-| updated | ❌ | 无法确定快应用视图更新时机 |
+| beforeUpdate | ✅ | |
+| updated | ✅ |  |
 | activated | ❌ |  |
 | deactivated | ❌ |  |
 | beforeDestroy | ✅ |  |
@@ -63,15 +63,15 @@
 | vm.$props | ✅ |  |
 | vm.$el | ❌ |  |
 | vm.$options | ✅ |  |
-| vm.$parent | ️️⚠️ | 获取到的是快应用元素对象 |
-| vm.$root | ⚠️ | 获取到的是快应用root对象 |
+| vm.$parent | ️️✅ |  |
+| vm.$root | ✅ |  |
 | vm.$children | ❌ | |
 | vm.$slots | ❌ |  |
 | vm.$scopedSlots | ❌ |  |
 | vm.$refs | ️️⚠️ | 获取到的是快应用元素对象 |
 | vm.$isServer | ✅ |  |
-| vm.$attrs | ❌ |  |
-| vm.$listeners | ❌ |  |
+| vm.$attrs | ✅ |  |
+| vm.$listeners | ✅ |  |
 | 实例方法 / 数据 |  |  | 
 | vm.$watch | ✅ |  |
 | vm.$set | ⚠️ | 不能set嵌套数据，如不能vm.$set(vm.someData, key, data)，只能vm.$set(vm, key, data) |
@@ -89,5 +89,5 @@
 | 指令 | ️️⚠️ | 不支持的有：v-text, v-html, v-pre, v-cloak, v-once |
 | 特殊特性 | ❌ |  |
 | 内置组件 | ️️️️⚠️ | 仅支持slot |
-| VNode接口 | ❌ |  |
+| VNode接口 | ✅ |  |
 | 服务端渲染 | ❌ |  |  
