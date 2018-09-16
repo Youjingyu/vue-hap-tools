@@ -2,7 +2,7 @@
 ### 标签问题
 快应用的组件可以简单分为容器组件（div等）、文本组件、表单组件、其他组件。快应用组件与html标签转换规则如下：  
 #### 标签转换列表
-
+  
 | 快应用组件 | html标签 |  
 |-----|-----|  
 | div | div;  p,h1,h2,h3,h4,h5,h6;  aside,footer,header,nav,main,section,figcaption,figure;   dd,dl,dt,ul,ol,li;  table,thead,tbody,td,th,tr;  fieldset,legend,article |  
@@ -16,7 +16,7 @@
 | input | input,button |  
 | image | img |  
 | video | video |  
-
+  
 - 块级元素（即上面表格中div组件对应的html标签）不能直接放置文本，需要这样使用:
 ```html
 <div>
