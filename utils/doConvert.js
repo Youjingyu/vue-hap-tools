@@ -20,11 +20,11 @@ module.exports = function (inputPath, outputPath, cb = () => {}) {
     const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
     fsExtra.outputFileSync(outputPath, convertApp(fileContent, manifest))
     cb(null)
-  } else if (/.css$/.test(inputPath)) {
+  } else if (/\.css$/.test(inputPath)) {
     const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
     fsExtra.outputFileSync(outputPath, convertStyle(fileContent))
     cb(null)
-  } else if (/.js$/.test(inputPath)) {
+  } else if (/\.js$/.test(inputPath)) {
     const fileContent = fsExtra.readFileSync(inputPath, 'utf8')
     fsExtra.outputFileSync(outputPath, preProcess(fileContent))
     cb(null)

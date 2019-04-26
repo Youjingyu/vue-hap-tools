@@ -33,7 +33,16 @@ module.exports = function (vueFile) {
 
   let style = ''
   if (block.styles && block.styles.length > 0) {
-    style = `<style>\n${convertStyle(block.styles[0].content)}\n</style>`
+    style = block.styles.map(styleElement => {
+      const attrs = styleElement.attrs
+      let strAttrs = Object.keys(attrs).map(key => {
+        return typeof attrs[key] === 'boolean' && attrs[key] ? key : `${key}="${attrs[key]}"`
+      }).join(' ')
+      if (strAttrs.trim()) {
+        strAttrs = ' ' + strAttrs
+      }
+      return `<style${strAttrs}>\n${convertStyle(styleElement.content)}\n</style>`
+    }).join('\n')
   }
 
   return `${components}${tpl}\n${js}\n${style}`
